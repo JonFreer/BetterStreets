@@ -1,0 +1,35 @@
+.tag_holder{
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+}
+.tag{
+    box-shadow: 0 1px 2px 0 var(--gm-fillbutton-keyshadow-color,rgba(60,64,67,.3)),0 1px 3px 1px var(--gm-fillbutton-ambientshadow-color,rgba(60,64,67,.15));
+    border-radius: 8px;
+    /* height:30px; */
+    /* line-height: 30px; */
+    width:fit-content;
+    padding:10px;
+    user-select: none;
+    cursor: pointer;
+    white-space: nowrap;
+
+
+}
+
+.tag:hover{
+    background-color: #fefdfd;
+    box-shadow: 0 1px 3px 0 var(--gm-fillbutton-keyshadow-color,rgba(60,64,67,.3)),0 1px 3px 3px var(--gm-fillbutton-ambientshadow-color,rgba(60,64,67,.15));
+}
+
+.tag.active{
+    color:white;
+    background-color: #1a73e8;
+}
+
+.tag_header{
+    text-align: left;
+    padding: 10px;
+    padding-left: 0px;
+    font-weight: 200;
+}

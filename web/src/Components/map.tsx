@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl'; 
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './map.css'
-const MyMap = (props:{markerLat:number, markerLon:number}) => {
+const MyMap = (props:{markerLat:number, markerLon:number, callback:any}) => {
 
 
 
@@ -52,6 +52,10 @@ const MyMap = (props:{markerLat:number, markerLon:number}) => {
             draggable: true
             }).setLngLat([props.markerLon,props.markerLat])
             .addTo(map);
+        
+        marker.on('drag',function(e){
+          props.callback(marker.getLngLat().lat,marker.getLngLat().lng)
+        })
 
         SetMarker(marker);
 

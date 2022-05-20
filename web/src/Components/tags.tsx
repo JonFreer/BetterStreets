@@ -4,28 +4,23 @@ interface TagsState{
     tags:any;
 }
 
-export class Tags extends React.Component<{}, TagsState> {
+export class Tags extends React.Component<{tags:any, callback:any}, TagsState> {
 
     constructor(props: any) {
         super(props);
-        this.state = {tags:{
-            "Pavement parking":false,
-            "Cyclelane":false,
-            "Dropped curb":false,
-            "Double Yellow":false,
-            "YPLAC":false,
-        }}
+        // this.state = {}
     }
 
     render() {
         
         let tags: any[] = [];
-        for(let i in this.state.tags){
+        for(let i in this.props.tags){
             // this.state.tags[i]= !this.state.tags[i]
-            tags.push(<div className={!this.state.tags[i]?"tag":"tag active"} 
+            tags.push(<div className={!this.props.tags[i]?"tag":"tag active"} 
             onClick={ ()=>{
-                this.state.tags[i] = !this.state.tags[i]
-                this.setState({tags:this.state.tags})}
+                this.props.callback(i)
+
+            }
         
         }
             >{i}</div>)

@@ -16,10 +16,14 @@ interface FormState {
     date: Date;
     dateModalActive: boolean;
     metadataModalActive: boolean;
+    initLat: number;
+    initLon: number;
     lat: number;
     lon: number;
     defaults: boolean; //are all the values their default value: used to check for update meta data pop up
     metaData: any;
+    imgFile: File | null;
+    tags: any;
 }
 
 class Form extends React.Component<{}, FormState> {
@@ -31,10 +35,20 @@ class Form extends React.Component<{}, FormState> {
             date: new Date(),
             dateModalActive: false,
             metadataModalActive: false,
+            initLat: 0,
+            initLon: 0,
             lat: 0,
             lon: 0,
             defaults: true,
-            metaData: undefined
+            metaData: undefined,
+            imgFile: null,
+            tags: {
+                "Pavement parking": false,
+                "Cyclelane": false,
+                "Dropped curb": false,
+                "Double Yellow": false,
+                "YPLAC": false,
+            }
         };
 
         // if we are using arrow function binding in not required
@@ -46,6 +60,16 @@ class Form extends React.Component<{}, FormState> {
     onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             let img = event.target.files[0];
+            // let formData = new FormData();
+            this.setState({ imgFile: img })
+
+            // this.setState({imgData:formData})
+            // var that = this;
+            // reader.onloadend = function() {
+            //   console.log('RESULT', reader.result)
+            //   that.setState({imgBase64:reader.result})
+            // }
+            // reader.readAsDataURL(img);
             console.log(img)
             exifr.parse(img).then(output => {
                 console.log('Camera:', output.Make, output.Model, output.DateTimeOriginal)
@@ -72,12 +96,38 @@ class Form extends React.Component<{}, FormState> {
 
 
         if (output.longitude != undefined) {
-            this.setState({ lat: output.latitude, lon: output.longitude, defaults: false })
+            this.setState({ initLat: output.latitude, lat: output.latitude, lon: output.longitude, initLon: output.longitude, defaults: false })
             console.log("updated location", output.latitude, output.longitude)
         }
 
         if (output.DateTimeOriginal != undefined) {
             this.setState({ date: output.DateTimeOriginal, defaults: false })
+        }
+    }
+
+    submit() {
+
+        let formData = new FormData();
+        if (this.state.imgFile != null) {
+
+            formData.append('file', this.state.imgFile);
+            formData.append("time", String(this.state.date.getTime()));
+            formData.append("tags", JSON.stringify(this.state.tags));
+            formData.append("lat", String(this.state.lat));
+            formData.append("lon", String(this.state.lon));
+
+            const requestOptions = {
+                method: 'POST',
+                // headers: { 'Content-Type': 'multipart/form-data' },
+                body: formData
+            };
+
+
+            fetch('http://localhost:3001/submit', requestOptions)
+                .then(response => response.json())
+                .then((data) => console.log("uploaded", data));
+        }else{
+            console.error("ImageFile == Null")
         }
     }
 
@@ -101,15 +151,26 @@ class Form extends React.Component<{}, FormState> {
                                 <AiOutlineEdit className='icon_form'></AiOutlineEdit>
                             </div>
                             <div className='tag_header'>Location</div>
-                            <MyMap markerLat={this.state.lat} markerLon={this.state.lon}></MyMap>
+                            <MyMap markerLat={this.state.initLat}
+                                markerLon={this.state.initLon}
+                                callback={(lat: number, lon: number) => { this.setState({ lat: lat, lon: lon }) }}
 
-                            <Tags></Tags>
+                            ></MyMap>
+
+                            <Tags tags={this.state.tags} callback={(val: any) => {
+                                this.state.tags[val] = !this.state.tags[val]
+                                this.setState({ tags: this.state.tags })
+                            }}></Tags>
+
+                            <label className="custom-file-upload" onClick={() => this.submit()}>
+                                Submit
+                            </label>
                         </>
 
 
                             : <> <div>
-                                    Upload your image. Tell us where and when it was taken. Submit! <br/> <br/> Its that simple 🥳
-                                </div></>}
+                                1) Upload your image. <br />2) Tell us where and when it was taken. <br /> 3) Submit! <br /> <br /> It's that simple 🥳
+                            </div></>}
 
 
 

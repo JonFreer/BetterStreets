@@ -1,7 +1,5 @@
 import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
-import ImageUploading from 'react-images-uploading';
-import { ExifParserFactory } from "ts-exif-parser";
-import exifr from 'exifr'
+
 import './form.css'
 
 function ModalDateTime(props:{open:boolean,callbackSave:any, callbackCancel:any}){

@@ -1,14 +1,11 @@
 
 
 import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
-import ImageUploading from 'react-images-uploading';
 import { ModalDateTime, ModalMetaData } from './modal';
-import { ExifParserFactory } from "ts-exif-parser";
 import exifr from 'exifr'
 import './form.css'
 import { AiOutlineEdit } from 'react-icons/ai';
 import MyMap from './map'
-import { isConstructorDeclaration } from 'typescript';
 import { Tags } from './tags'
 //AiOutlineEdit
 interface FormState {

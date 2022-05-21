@@ -1,0 +1,8 @@
+.env
+*.cert
+*.pem
+
+__pycache__
+.mypy_cache
+
+node_modules/

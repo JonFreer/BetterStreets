@@ -1,0 +1,17 @@
+http:
+  middlewares:
+    cors:
+      headers:
+        accessControlExposeHeaders: "X-Total-Count"
+        accessControlAllowHeaders: "Content-Type,X-Token"
+        accessControlAllowMethods: "OPTIONS,GET,POST,PUT,PATCH,DELETE"
+        accessControlAllowCredentials: "true"
+        accessControlAllowOriginListRegex: 'https?://([^.]+\.)?achieve.localhost(/.*)?'
+    api-prefix:
+      stripPrefix:
+        prefixes:
+          - "/api"
+    admin-prefix:
+      stripPrefix:
+        prefixes:
+          - "/admin"

@@ -4,7 +4,7 @@ const cors = require('cors');
 const multerConfig = require("./config/multer");
 const multer  = require('multer');
 const app = express();
-const port = 3001;
+const port = 80;
 
 // Where we will keep books
 let books = [];
@@ -15,7 +15,9 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const upload = multerConfig.saveToUploads;
-
+app.get("/" ,function(req,res){
+  return res.json("API Alive!");
+})
 app.post('/submit', function (req, res) {
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {

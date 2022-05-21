@@ -7,7 +7,9 @@ class Main extends React.Component<{}, {}> {
 
     render() {
         return (
-       <MapMain markerLat={52.0} markerLon={0}></MapMain>)
+            <>
+       <MapMain markerLat={52.0} markerLon={0}></MapMain>
+       </>)
     }
 }
 

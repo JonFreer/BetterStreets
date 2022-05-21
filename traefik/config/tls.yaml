@@ -1,0 +1,6 @@
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /traefik/certs/dev.cert
+        keyFile: /traefik/certs/dev.pem

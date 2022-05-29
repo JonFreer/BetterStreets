@@ -17,7 +17,7 @@ services:
         context: ./web
         # target: prod
         args:
-          REACT_APP_HOST: ${DOMAIN:-badlyparked.localhost}
+          REACT_APP_HOST: ${DOMAIN:-badlyparked.co.uk}
       restart: unless-stopped
       labels:
         - "traefik.enable=true"

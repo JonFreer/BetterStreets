@@ -2,15 +2,21 @@
 FROM python:3.9 as prod
 
 ENV FORWARDED_ALLOW_IPS="*"
-
+RUN pip install poetry
 RUN pip install -U pip
 
 COPY ./ /app/
-RUN pip install pyproject.toml
+WORKDIR "/app"
+# RUN pip install pyproject.toml
+# RUN pip install uvicorn
+RUN poetry config virtualenvs.create false
+RUN poetry install
 #--use-feature=in-tree-build .
 
-ENV MODULE_NAME=badlyparked.main
+# ENV MODULE_NAME=badlyparked.main
 FROM prod as dev
+ENV PYTHONPATH=$PWD
 
 # CMD /start-reload.sh
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+# CMD tail -f /dev/null
+CMD ["uvicorn", "badlyparked.main:app", "--host", "0.0.0.0", "--port", "80"]

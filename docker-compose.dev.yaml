@@ -7,8 +7,8 @@ services:
       target: dev
     environment:
       REACT_APP_HOST: ${DOMAIN:-badlyparked.localhost}
-    labels:
-      - "traefik.http.routers.web.rule=Host(`${DOMAIN:-badlyparked.localhost}`)"
+    # labels:
+      # - "traefik.http.routers.web.rule=Host(`${DOMAIN:-badlyparked.localhost}`)"
     volumes:
       - "./web/src:/app/src"
       - "./web/public:/app/public"
@@ -49,7 +49,10 @@ services:
     build:
       context: ./api
       target: dev
-    labels:
-      - "traefik.http.routers.api.rule=Host(`${DOMAIN:-badlyparked.localhost}`) && PathPrefix(`/api`)"
+    # environment:
+    #   DOMAIN: "${DOMAIN:-badlyparked.localhost}"
+    # labels:
+      # - "traefik.http.routers.api.rule=Host(`${DOMAIN:-badlyparked.localhost}`) && PathPrefix(`/api`)"
+      # - "traefik.http.routers.api.rule=Host(`${DOMAIN:-api.badlyparked.localhost}`)"
     volumes:
       - "./api:/app"

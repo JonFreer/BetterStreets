@@ -3,9 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import MyMap from './Components/map';
 import Main from './Components/main'
-import Form from './Components/form'
 import Submit from './Components/submit';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from './Components/navbar';

@@ -15,7 +15,7 @@ services:
   web:
       build:
         context: ./web
-        target: prod
+        # target: prod
         args:
           REACT_APP_HOST: ${DOMAIN:-badlyparked.localhost}
       restart: unless-stopped
@@ -23,20 +23,20 @@ services:
         - "traefik.enable=true"
         - "traefik.http.services.web.loadbalancer.server.port=80"
         - "traefik.http.routers.web.service=web"
-        - "traefik.http.routers.web.rule=Host(`${DOMAIN:-badlyparked.localhost}`)"
+        - "traefik.http.routers.web.rule=Host(`${DOMAIN:-badlyparked.co.uk}`)"
         - "traefik.http.routers.web.tls=true"
   api:
     # image: ghcr.io/hackthemidlands/htm-achievements/api:${TAG}
     build:
       context: ./api
-      target: prod
+      # target: prod
       # labels:
       #   org.opencontainers.image.title: achievements-api
       #   org.opencontainers.image.source: https://github.com/HackTheMidlands/htm-achievements
     restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
     labels:
       # - "traefik.http.services.api.loadbalancer.server.port=80"
       # - "traefik.http.routers.api.service=api"
@@ -48,10 +48,10 @@ services:
       # - "traefik.http.middlewares.testheader.headers.accesscontrolalloworigin=origin-list-or-null"
       - "traefik.enable=true"
       - "traefik.http.routers.api.tls=true"
-      - "traefik.http.routers.api.rule=Host(`${DOMAIN:-badlyparked.localhost}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api.rule=Host(`${DOMAIN:-badlyparked.co.uk}`) && PathPrefix(`/api`)"
       - "traefik.http.routers.api.middlewares=api-prefix@file"
     environment:
-      DOMAIN: "${DOMAIN:-badlyparked.localhost}"
+      DOMAIN: "${DOMAIN:-badlyparked.co.uk}"
       DATABASE_URL: "postgresql://${API_DB_USERNAME}:${API_DB_PASSWORD}@db/api"
       ADMIN_LIST: "${ADMIN_LIST}"
       SESSION_SECRET: "${SESSION_SECRET}"

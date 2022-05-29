@@ -3,6 +3,8 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './map.css'
 import GeoJSONSource from 'maplibre-gl/src/source/geojson_source'
+import { Point } from 'geojson';
+import { LayoutRouteProps } from 'react-router-dom';
 // import MapLayerEventType from
 const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any }) => {
 
@@ -297,13 +299,15 @@ const MapMain = (props: { data: any }) => {
 
         let source = map.getSource('submissions'); 
         if (source != undefined) {
-          (source as GeoJSONSource).getClusterExpansionZoom(
+          (source as unknown as GeoJSONSource).getClusterExpansionZoom(
             clusterId,
             function (err, zoom) {
               if (err) return;
-
+              
+              let c = (features[0].geometry as Point).coordinates;
+              
               map.easeTo({
-                center: features[0].geometry.coordinates,
+                center: [c[0],c[1]],
                 zoom: zoom
               });
             }
@@ -312,7 +316,8 @@ const MapMain = (props: { data: any }) => {
       });
 
       map.on('click', 'unclustered-point', function (e) {
-        var coordinates = e.features[0].geometry.coordinates.slice();
+        // let c = (features[0].geometry as Point).coordinates;
+        var coordinates = (e.features[0].geometry as Point).coordinates.slice();
 
         var time = e.features[0].properties.time;
         var id = e.features[0].properties.id;
@@ -325,7 +330,7 @@ const MapMain = (props: { data: any }) => {
         }
          
         new maplibregl.Popup()
-        .setLngLat(coordinates)
+        .setLngLat([coordinates[0],coordinates[1]])
         .setHTML(
           '<img src="/api/img_thumb/'+id+ '.WebP" > </img>'+'Date: '+time
         

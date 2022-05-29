@@ -17,7 +17,7 @@ function Submit() {
 
     // const history = useHistory();
     const navigate = useNavigate();
-    const [image, setImage] = useState<undefined | String>(undefined);
+    const [image, setImage] = useState<undefined | string>(undefined);
     const [date, setDate] = useState<Date>(new Date());
     const [dateModalActive, setDateModalActive] = useState(false);
     const [metaModalActive, setMetaModalActive] = useState(false);
@@ -207,12 +207,13 @@ function Submit() {
                             tags[val] = !tags[val]
                             setRerender(!rerender);
                             // this.setState({ tags: tags })
+                            //icon="spinner" //removed
                         }}></Tags>
 
                         <label className={uploadState == 0 ? "custom-file-upload" : "custom-file-upload uploading"} onClick={() => submit()}>
-                            {uploadState == 0 ? "Submit" : <FaSpinner icon="spinner" className="spinner" ></FaSpinner>}
+                            {uploadState == 0 ? "Submit" : <FaSpinner className="spinner" ></FaSpinner>}
                         </label>
-
+                        
                     </>
 
 

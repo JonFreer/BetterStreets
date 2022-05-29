@@ -139,7 +139,7 @@ function ImageDraw(props: { open: boolean, img: any, callback:any }) {
         if (ctx == null || ctx_mask == null) { return }
         ctx.imageSmoothingQuality = "high"
         ctx.imageSmoothingEnabled=true;
-        ctx.mozImageSmoothingEnabled    = true;
+        // ctx.mozImageSmoothingEnabled    = true;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(maskCanvas, 0, 0);
         ctx.globalCompositeOperation = 'source-in';

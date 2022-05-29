@@ -1,7 +1,7 @@
 import NavBar from './navbar';
 import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Form from './form';
+
 import { MapMain } from './map';
 // class Main extends React.Component<{}, {}> {
 function Main() {

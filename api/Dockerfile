@@ -1,26 +1,13 @@
-# stage: dependencies
-FROM node:16 AS dependencies
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9 as prod
 
-WORKDIR /app/
-# removed yarn.lock
-COPY package.json /app/ 
-RUN npm install
+ENV FORWARDED_ALLOW_IPS="*"
 
-# stage: builder
-FROM dependencies AS builder
+RUN pip install -U pip
+
 COPY ./ /app/
-# ARG REACT_APP_HOST
-# RUN npm build
+RUN pip install --use-feature=in-tree-build .
 
-# stage: prod
-FROM nginx:latest AS prod
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/build/ /usr/share/nginx/html/
+ENV MODULE_NAME=badlyparked.main
+FROM prod as dev
 
-# stage: dev
-FROM dependencies AS dev
-# ARG REACT_APP_HOST
-# ENV REACT_APP_HOST=${REACT_APP_HOST}
-COPY ./ /app/
-# CMD ls
-CMD PORT=80 npm run live
+CMD /start-reload.sh

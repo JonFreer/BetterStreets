@@ -6,8 +6,10 @@ import './App.css';
 import MyMap from './Components/map';
 import Main from './Components/main'
 import Form from './Components/form'
+import Submit from './Components/submit';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from './Components/navbar';
+import About from './Components/about';
 function App() {
 
  
@@ -21,7 +23,8 @@ function App() {
       <Routes>
         {/* <Route path="/" element={<Form />}> */}
           <Route index element={<Main />} />
-          <Route path="submit" element={<Form />} />
+          <Route path="submit" element={<Submit />} />
+          <Route path="about" element={<About />} />
 
         {/* </Route> */}
       </Routes>

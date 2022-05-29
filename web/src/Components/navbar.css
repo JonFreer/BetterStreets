@@ -3,13 +3,14 @@
     top:0px;
     /* width:100vw; */
     height:50px;
-    background-color: #1a73e8;
+    background-color: white;
     display: flex;
-    color:white;
+    color:var(--main-bg-color);
     /* padding:10px; */
     justify-content: space-between;
     user-select: none;
     box-shadow: 0 1px 2px 0 var(--gm-fillbutton-keyshadow-color,rgba(60,64,67,.3)),0 1px 3px 1px var(--gm-fillbutton-ambientshadow-color,rgba(60,64,67,.15));
+    z-index: 10;
 }
 
 .navBar_title{
@@ -19,6 +20,7 @@
     margin: 10px;
     color: inherit; /* blue colors for links too */
     text-decoration: inherit; /* no underline */
+    margin-right: auto;
 }
 
 .navBar_submit{
@@ -34,9 +36,35 @@
     color: inherit; /* blue colors for links too */
     text-decoration: inherit; /* no underline */
 
+    background-color: #166ad8;
+color: white;
+border-radius: 15px;
+margin: 5px;
+padding: 5px 10px;
+
 }
 
 .navBar_submit:hover{
     background-color: #166ad8;
+}
+
+.navBar_link{
+    font-size: 15px;
+    /* font-weight: 700; */
+    line-height: 30px;
+    padding:10px;
+    color: inherit; /* blue colors for links too */
+    text-decoration: inherit; /* no underline */
+    /* text-align: center; */
+}
+
+.navBar_link:hover{
+    /* text-decoration:bold; no underline */
+    /* font-weight: 600; */
+}
+
+.navBar_icon{
+    font-size: 20px;
+    transform: translate(-3px,4px);
 }
 

@@ -1,5 +1,3 @@
-
-
 import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
 import { ModalDateTime, ModalMetaData } from './modal';
 import exifr from 'exifr'
@@ -7,6 +5,8 @@ import './form.css'
 import { AiOutlineEdit } from 'react-icons/ai';
 import MyMap from './map'
 import { Tags } from './tags'
+import { FaSpinner } from 'react-icons/fa';
+// import {withRouter} from 'react-router';
 //AiOutlineEdit
 interface FormState {
     image: undefined | string;
@@ -21,6 +21,7 @@ interface FormState {
     metaData: any;
     imgFile: File | null;
     tags: any;
+    uploadState: number; //0 pre, 1 uploading, 2// success
 }
 
 class Form extends React.Component<{}, FormState> {
@@ -39,6 +40,7 @@ class Form extends React.Component<{}, FormState> {
             defaults: true,
             metaData: undefined,
             imgFile: null,
+            uploadState: 0,
             tags: {
                 "Pavement parking": false,
                 "Cyclelane": false,
@@ -57,17 +59,7 @@ class Form extends React.Component<{}, FormState> {
     onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             let img = event.target.files[0];
-            // let formData = new FormData();
             this.setState({ imgFile: img })
-
-            // this.setState({imgData:formData})
-            // var that = this;
-            // reader.onloadend = function() {
-            //   console.log('RESULT', reader.result)
-            //   that.setState({imgBase64:reader.result})
-            // }
-            // reader.readAsDataURL(img);
-            console.log(img)
             exifr.parse(img).then(output => {
                 console.log('Camera:', output.Make, output.Model, output.DateTimeOriginal)
                 this.setState({ metaData: output });
@@ -76,7 +68,6 @@ class Form extends React.Component<{}, FormState> {
                 } else {
                     this.setState({ metadataModalActive: true })
                 }
-
             })
             //   const Data = ExifParserFactory.create(img).parse();
             // console.log(parser.parse())
@@ -90,23 +81,22 @@ class Form extends React.Component<{}, FormState> {
     };
 
     updateMetaDate(output: any) {
-
-
         if (output.longitude != undefined) {
             this.setState({ initLat: output.latitude, lat: output.latitude, lon: output.longitude, initLon: output.longitude, defaults: false })
-            console.log("updated location", output.latitude, output.longitude)
         }
-
         if (output.DateTimeOriginal != undefined) {
             this.setState({ date: output.DateTimeOriginal, defaults: false })
         }
     }
 
     submit() {
-
+        if (this.state.uploadState != 0) {
+            return;
+        }
+        this.setState({ uploadState: 1 })
         let formData = new FormData();
         if (this.state.imgFile != null) {
-
+            console.log(this.state.imgFile)
             formData.append('file', this.state.imgFile);
             formData.append("time", String(this.state.date.getTime()));
             formData.append("tags", JSON.stringify(this.state.tags));
@@ -120,15 +110,35 @@ class Form extends React.Component<{}, FormState> {
             };
 
 
-            fetch('http://localhost:3001/submit', requestOptions)
+            fetch('https://api.badlyparked.localhost/submit', requestOptions)
                 .then(response => response.json())
-                .then((data) => console.log("uploaded", data));
-        }else{
+                .then((data) => {
+                    if (data == 'Success') {
+                        this.setState({ uploadState: 2 });
+                    } else {
+                        console.error("Upload error: ", data)
+                        this.props.history.push('/');
+                        this.setState({ uploadState: 0 });
+                    }
+                });
+        } else {
             console.error("ImageFile == Null")
         }
     }
 
     render() {
+
+        if (this.state.uploadState == 2) {
+            return (
+            <div>
+                <div>
+                    <div className="form_holder">
+                        Upload!
+                    </div>
+                </div>
+            </div>)
+        }
+
         return (
             <div>
                 <div>
@@ -159,9 +169,10 @@ class Form extends React.Component<{}, FormState> {
                                 this.setState({ tags: this.state.tags })
                             }}></Tags>
 
-                            <label className="custom-file-upload" onClick={() => this.submit()}>
-                                Submit
+                            <label className={this.state.uploadState == 0 ? "custom-file-upload" : "custom-file-upload uploading"} onClick={() => this.submit()}>
+                                {this.state.uploadState == 0 ? "Submit" : <FaSpinner icon="spinner" className="spinner" ></FaSpinner>}
                             </label>
+
                         </>
 
 

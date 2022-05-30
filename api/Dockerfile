@@ -19,5 +19,5 @@ ENV PYTHONPATH=$PWD
 
 # CMD /start-reload.sh
 # CMD tail -f /dev/null
-CMD PORT=80 uvicorn badlyparked.main:app --host 0.0.0.0 --port 80
+CMD PORT=80 ./prestart.sh
 #, "--host", "0.0.0.0", "--port", "80"]

@@ -44,6 +44,9 @@ services:
       - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN:-badlyparked.localhost}`)"
     environment:
       DOMAIN: ${DOMAIN:-badlyparked.localhost}
+    networks: 
+      - traefik_web
+
   
   api:
     build:
@@ -56,3 +59,8 @@ services:
       # - "traefik.http.routers.api.rule=Host(`${DOMAIN:-api.badlyparked.localhost}`)"
     volumes:
       - "./api:/app"
+
+networks:
+  traefik_web:
+    external:
+            true

@@ -117,7 +117,7 @@ function Submit() {
             };
 
 
-            fetch('https://badlyparked.localhost/api/submit', requestOptions)
+            fetch('/api/submit', requestOptions)
                 .then(response => {
                     console.log(response)
                     if (response.status == 200) {

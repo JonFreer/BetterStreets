@@ -19,7 +19,7 @@ function Main() {
 
         
 
-        fetch('https://badlyparked.localhost/api/submissions', requestOptions)
+        fetch('/api/submissions', requestOptions)
             .then(response => {
                 console.log(response)
                 if(response.status==200){

@@ -88,15 +88,15 @@ function ImageDraw(props: { open: boolean, img: any, callback:any }) {
         }
     }
 
-    const drawLine = (x:number,y:number) => {
+    const drawLine = (x_:number,y_:number) => {
 
             const mask_ctx = maskCanvas.getContext('2d');
             
             if(mask_ctx==null){ return }
             mask_ctx.lineWidth = 30;
             mask_ctx.lineCap = 'round';
-            const newX = x;
-            const newY = y;
+            const newX = x_;
+            const newY = y_;
             mask_ctx.beginPath();
             mask_ctx.moveTo(x, y);
             mask_ctx.lineTo(newX, newY);

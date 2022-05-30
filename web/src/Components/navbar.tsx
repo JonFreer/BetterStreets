@@ -8,6 +8,8 @@ render(){
     return(<div className='navBar'>
         <Link className='navBar_title' to="/">
         BadlyParked
+
+        <div className="navBar_beta">Beta</div>
         </Link>
 
         {/* <button className='navBar_button'> */}

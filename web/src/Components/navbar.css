@@ -21,6 +21,7 @@
     color: inherit; /* blue colors for links too */
     text-decoration: inherit; /* no underline */
     margin-right: auto;
+    display: flex;
 }
 
 .navBar_submit{
@@ -68,3 +69,14 @@ padding: 5px 10px;
     transform: translate(-3px,4px);
 }
 
+.navBar_beta{
+    background: #ff5400;
+    color: white;
+    border-radius: 4px;
+    font-size: 13px;
+    height: fit-content;
+    margin: auto;
+    line-height: 15px;
+    margin-left: 10px;
+    padding: 5px;
+}

@@ -1,6 +1,6 @@
 import NavBar from './navbar';
 import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route,useParams } from "react-router-dom";
 
 import { MapMain } from './map';
 // class Main extends React.Component<{}, {}> {
@@ -9,6 +9,7 @@ function Main() {
 
     const [data, setData] = useState<any>([]);
 
+    let { id } = useParams();
 
     function getData(){
         const requestOptions = {
@@ -43,7 +44,7 @@ function Main() {
     
         return (
             <>
-       <MapMain data={data}></MapMain>
+       <MapMain data={data} id={id} ></MapMain>
        </>)
     
 }

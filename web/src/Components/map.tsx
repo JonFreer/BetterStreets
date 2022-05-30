@@ -74,12 +74,13 @@ const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any 
   return <div className="map-container-submit" ref={mapContainer}></div>;
 };
 
-const MapMain = (props: { data: any }) => {
+const MapMain = (props: { data: any, id: string | undefined }) => {
 
 
 
   const mapContainer = useRef<any>(null);
   const [map, SetMap] = useState<any>(null);
+  const [popup, SetPopup] = useState<any>(null);
   // const [markers, SetMarkers] = useState<any>([]);
   // const [startLat, setStartLat] = useState(props.markerLat)
   // 
@@ -101,9 +102,9 @@ const MapMain = (props: { data: any }) => {
         "geometry": {
           "type": "Point",
           "coordinates": [props.data[i].lon, props.data[i].lat]
-        },"properties": {
+        }, "properties": {
           "time": props.data[i].time,
-          "id":props.data[i].id
+          "id": props.data[i].id
         }
       })
     }
@@ -113,6 +114,12 @@ const MapMain = (props: { data: any }) => {
     });
   }
 
+  useEffect(()=>{
+    if(props.id!= undefined){
+      addModal(props.id);
+    }
+    
+  },[props.id, props.data,map])
 
   useEffect(() => {
     // This API key is for use only in stackblitz.com
@@ -245,10 +252,10 @@ const MapMain = (props: { data: any }) => {
           'text-field': '{point_count_abbreviated}',
           'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
           'text-size': 12,
-          
+
         },
-        paint:{
-          "text-color":"#fff"
+        paint: {
+          "text-color": "#fff"
         }
 
       });
@@ -297,49 +304,58 @@ const MapMain = (props: { data: any }) => {
         });
         var clusterId = features[0].properties.cluster_id;
 
-        let source = map.getSource('submissions'); 
+        let source = map.getSource('submissions');
         if (source != undefined) {
           (source as unknown as GeoJSONSource).getClusterExpansionZoom(
             clusterId,
             function (err, zoom) {
               if (err) return;
-              
+
               let c = (features[0].geometry as Point).coordinates;
-              
+
               map.easeTo({
-                center: [c[0],c[1]],
+                center: [c[0], c[1]],
                 zoom: zoom
               });
             }
           );
         }
       });
-
+      
       map.on('click', 'unclustered-point', function (e) {
         // let c = (features[0].geometry as Point).coordinates;
         var coordinates = (e.features[0].geometry as Point).coordinates.slice();
 
         var time = e.features[0].properties.time;
         var id = e.features[0].properties.id;
-    
+
         // Ensure that if the map is zoomed out such that
         // multiple copies of the feature are visible, the
         // popup appears over the copy being pointed to.
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
-         
-        new maplibregl.Popup()
-        .setLngLat([coordinates[0],coordinates[1]])
-        .setHTML(
-          '<img src="/api/img_thumb/'+id+ '.WebP" > </img>'+'Date: '+time
-        
-        )
-        .addTo(map);
-        });
 
+        new maplibregl.Popup()
+          .setLngLat([coordinates[0], coordinates[1]])
+          .setHTML(
+            '<img src="/api/img_thumb/' + id + '.WebP" > </img>' + 'Date: ' + time
+
+          )
+          .addTo(map);
+          // window.location.pathname=id;
+          window.history.replaceState(null, "BadlyParked", id)
+      });
+
+
+      
+      
 
       SetMap(map);
+
+      // if(props.id!=undefined){
+      //   addModal(props.id)
+      // }
       // SetMap(map);
     }
 
@@ -370,6 +386,48 @@ const MapMain = (props: { data: any }) => {
     }
 
   }, [props.data])
+
+
+  function addModal(id: string) {
+    if(popup!=null){
+      popup.remove()
+    }
+    var result = props.data.find(obj => {
+      return obj.id=== id
+    })
+    console.log(result,map)
+    if(result==undefined || map == undefined){
+      return;
+    }
+    console.log("addModal2")
+    var coordinates = [result.lon,result.lat];
+
+    var time = result.time;
+    // var id = e.features[0].properties.id;
+
+    // Ensure that if the map is zoomed out such that
+    // multiple copies of the feature are visible, the
+    // popup appears over the copy being pointed to.
+    // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    // }
+
+    map.jumpTo({
+      center: [coordinates[0], coordinates[1]],
+      zoom: 10
+    });
+    const pop =new maplibregl.Popup();
+      pop.setLngLat([coordinates[0], coordinates[1]])
+      .setHTML(
+        '<img src="/api/img_thumb/' + id + '.WebP" > </img>' + 'Date: ' + time ).addTo(map);
+      // pop.remove
+
+      pop.on('close',()=>{
+        console.log(window.location.pathname)
+      })
+
+      SetPopup(pop);
+  }
 
   return <div className="map-container-main" ref={mapContainer}></div>;
 };

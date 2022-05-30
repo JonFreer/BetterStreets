@@ -91,3 +91,16 @@ width:max-content;
     transform:translateX(35px);
     box-shadow: 0 1px 2px 0 var(--gm-fillbutton-keyshadow-color,rgba(60,64,67,.3)),0 1px 3px 1px var(--gm-fillbutton-ambientshadow-color,rgba(60,64,67,.15));
 }
+
+.beta{
+    background: #ff5400;
+    color: white;
+    border-radius: 4px;
+    /* font-size: 13px; */
+    height: fit-content;
+    /* margin: auto; */
+    line-height: 15px;
+    /* margin-left: 10px; */
+    padding: 5px;
+    width:fit-content;
+}

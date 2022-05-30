@@ -23,6 +23,7 @@ function App() {
           <Route index element={<Main />} />
           <Route path="submit" element={<Submit />} />
           <Route path="about" element={<About />} />
+          <Route path="/:id" element={<Main />} />
 
         {/* </Route> */}
       </Routes>

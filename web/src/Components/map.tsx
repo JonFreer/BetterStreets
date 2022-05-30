@@ -339,7 +339,7 @@ const MapMain = (props: { data: any, id: string | undefined }) => {
         new maplibregl.Popup()
           .setLngLat([coordinates[0], coordinates[1]])
           .setHTML(
-            '<img src="/api/img_thumb/' + id + '.WebP" > </img>' + 'Date: ' + time
+            '<img class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>'
 
           )
           .addTo(map);
@@ -419,7 +419,8 @@ const MapMain = (props: { data: any, id: string | undefined }) => {
     const pop =new maplibregl.Popup();
       pop.setLngLat([coordinates[0], coordinates[1]])
       .setHTML(
-        '<img src="/api/img_thumb/' + id + '.WebP" > </img>' + 'Date: ' + time ).addTo(map);
+        '<img class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>'
+         ).addTo(map);
       // pop.remove
 
       pop.on('close',()=>{

@@ -28,7 +28,7 @@ function About(){
                         API
                     </h3>
                     <p className={styles.about_box_paragraph} > 
-                All of the data that we collect is publically accessable! It can be easily accessed through our API. Click here to visit the documentation.
+                All of the data that we collect is publically accessible! It can be easily accessed through our API. Click here to visit the documentation.
               </p>
               <div className={styles.about_box_button}>Vist API</div>
               </div>

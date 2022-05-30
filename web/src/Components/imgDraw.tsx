@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
 import {MdOutlineDone} from 'react-icons/md';
 import { AiOutlineEdit } from 'react-icons/ai';
 import {FaUndoAlt} from 'react-icons/fa';
+import * as StackBlur from 'stackblur-canvas';
 function ImageDraw(props: { open: boolean, img: any, callback:any }) {
     const [canvas, setCanvas] = useState(document.createElement('canvas'));
     const [maskCanvas, setMaskCanvas] = useState(document.createElement('canvas'));
@@ -164,6 +165,11 @@ function ImageDraw(props: { open: boolean, img: any, callback:any }) {
         ctx.globalCompositeOperation = 'source-in';
         ctx.filter = 'blur(10px)';
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if(isSafari){
+            StackBlur.canvasRGB(canvas, 0,0,canvas.width,canvas.height, 10);
+        }
+        // ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
         ctx.filter = 'blur(0px)';
         ctx.globalCompositeOperation = 'destination-over';

@@ -164,10 +164,11 @@ function ImageDraw(props: { open: boolean, img: any, callback:any }) {
         ctx.drawImage(maskCanvas, 0, 0);
         ctx.globalCompositeOperation = 'source-in';
         ctx.filter = 'blur(10px)';
+        // StackBlur.image(img,canvas,20)
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         if(isSafari){
-            StackBlur.canvasRGB(canvas, 0,0,canvas.width,canvas.height, 10);
+            StackBlur.canvasRGB(canvas, 0,0,canvas.width,canvas.height, 20);
         }
         // ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 

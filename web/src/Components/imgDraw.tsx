@@ -34,11 +34,11 @@ function ImageDraw(props: { open: boolean, img: any, callback:any }) {
             // }
 
             maskCanvas.addEventListener('mousedown', startDrawing);
-            maskCanvas.addEventListener('mousemove', drawLine);
+            maskCanvas.addEventListener('mousemove', mouseMove);
             maskCanvas.addEventListener('mouseup', stopDrawing);
             maskCanvas.addEventListener('mouseout', stopDrawing);
-            maskCanvas.addEventListener('touchstart',startDrawing);
-            maskCanvas.addEventListener('touchmove',drawLine);
+            maskCanvas.addEventListener('touchstart',startDrawing_touch);
+            maskCanvas.addEventListener('touchmove',touchMove);
             maskCanvas.addEventListener('touchend',stopDrawing);
             // draw()
         }
@@ -49,33 +49,54 @@ function ImageDraw(props: { open: boolean, img: any, callback:any }) {
     var y = 0;
 
     const stopDrawing = () => {
+        console.log("stop")
         // setMouseDown(false);
         isMouseDown = false;
         points.push({mode: "end" });
     }
 
     const startDrawing = (event: any) => {
-        // setMouseDown(true);
-        console.log("mouseDown = true")
         isMouseDown = true;
         [x, y] = [event.offsetX* canvas.width / canvas.clientWidth , event.offsetY* canvas.height / canvas.clientHeight ];
-        // setX(event.offsetX);
-        // setY(event.offsetY)
         points.push({ mode: "begin" });
     }
 
-    const drawLine = (event:any) => {
-        console.log("move")
+    const startDrawing_touch = (event: any) => {
+        isMouseDown = true;
+        const x_ = (event.changedTouches[0].clientX-canvas.getBoundingClientRect().left) * canvas.width / canvas.clientWidth;
+        const y_ = (event.changedTouches[0].clientY-canvas.getBoundingClientRect().top)* canvas.height / canvas.clientHeight;
+        [x,y] =[x_,y_];
+        // [x, y] = [event.changedTouches[0].clientX* canvas.width / canvas.clientWidth , event.changedTouches[0].clientY* canvas.height / canvas.clientHeight ];
+        points.push({ mode: "begin" });
+    }
+
+
+    const mouseMove = (event:any)=>{
+            if (isMouseDown) {
+                const x = event.offsetX* canvas.width / canvas.clientWidth;
+                const y = event.offsetY* canvas.height / canvas.clientHeight;
+                drawLine(x,y);
+            }
+    }
+
+    const touchMove = (event:any)=>{
         if (isMouseDown) {
+            const x = (event.changedTouches[0].clientX-canvas.getBoundingClientRect().left) * canvas.width / canvas.clientWidth;
+            const y = (event.changedTouches[0].clientY-canvas.getBoundingClientRect().top)* canvas.height / canvas.clientHeight;
+            drawLine(x,y);
+            event.preventDefault();
+        }
+    }
+
+    const drawLine = (x:number,y:number) => {
+
             const mask_ctx = maskCanvas.getContext('2d');
             
-            console.log("move2")
             if(mask_ctx==null){ return }
-            mask_ctx.lineWidth = 20;
+            mask_ctx.lineWidth = 30;
             mask_ctx.lineCap = 'round';
-            console.log("move3")
-            const newX = event.offsetX* canvas.width / canvas.clientWidth;
-            const newY = event.offsetY* canvas.height / canvas.clientHeight;
+            const newX = x;
+            const newY = y;
             mask_ctx.beginPath();
             mask_ctx.moveTo(x, y);
             mask_ctx.lineTo(newX, newY);
@@ -95,17 +116,15 @@ function ImageDraw(props: { open: boolean, img: any, callback:any }) {
             x = newX;
             y = newY;
             draw();
-        }
+        
     }
 
     function undo(){
-        console.log("undo")
         recursivePop()
         redrawMask()
     }
 
     function recursivePop(){
-        console.log("pop")
         if(points.length==0){
             return
         }

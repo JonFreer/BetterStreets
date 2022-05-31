@@ -1,3 +1,4 @@
+from email.policy import default
 import uuid
 from typing import Any, List
 from xmlrpc.client import boolean
@@ -25,6 +26,7 @@ class Submission(Base):
     tag_dropped = Column(Boolean,nullable=False)
     tag_pavement = Column(Boolean,nullable=False)
     tag_double_yellow = Column(Boolean,nullable=False)
+    visible = Column(Boolean,default=True)
 
 # class User(Base):
 #     __tablename__ = "users"

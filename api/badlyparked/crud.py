@@ -10,7 +10,7 @@ from . import config, models
 
 def get_submissions(db: Session, limit_offset: Tuple[int, int]):
     limit, offset = limit_offset
-    submissions = db.query(models.Submission).offset(offset).limit(limit).all()
+    submissions = db.query(models.Submission).filter(models.Submission.visible != False).offset(offset).limit(limit).all()
     return submissions
 
 def create_submission(db: Session, time:datetime, lat:float,lon:float,tags:Dict[str, Any])-> models.Submission:
@@ -34,4 +34,11 @@ def create_submission(db: Session, time:datetime, lat:float,lon:float,tags:Dict[
 
     #once uploaded: save the file
 
+    return db_submission
+
+def set_visibility(db: Session, id: uuid.UUID, visibility:bool):
+    db_submission = db.query(models.Submission).filter_by(id=id).first()
+    db_submission.visible = visibility
+    db.commit()
+    db.refresh(db_submission)
     return db_submission

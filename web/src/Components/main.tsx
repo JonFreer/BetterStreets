@@ -3,12 +3,13 @@ import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
 import { BrowserRouter, Routes, Route,useParams } from "react-router-dom";
 
 import { MapMain } from './map';
+import ImgPopUp from './imgPopUp';
 // class Main extends React.Component<{}, {}> {
 function Main() {
 
 
     const [data, setData] = useState<any>([]);
-
+    const [imgPopUpOpen, setImgPopUpOpen] = useState(false);
     let { id } = useParams();
 
     function getData(){
@@ -44,7 +45,8 @@ function Main() {
     
         return (
             <>
-       <MapMain data={data} id={id} ></MapMain>
+            {imgPopUpOpen?<ImgPopUp id={id} closeCallback={()=>{setImgPopUpOpen(false)}}  ></ImgPopUp>:<></>}
+            <MapMain data={data} id={id} openImgPopUpCallback={()=>{console.log("hi");setImgPopUpOpen(true)}} ></MapMain>
        </>)
     
 }

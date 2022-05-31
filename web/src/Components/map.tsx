@@ -5,6 +5,7 @@ import './map.css'
 import GeoJSONSource from 'maplibre-gl/src/source/geojson_source'
 import { Point } from 'geojson';
 import { LayoutRouteProps } from 'react-router-dom';
+import { renderToString } from 'react-dom/server'
 // import MapLayerEventType from
 const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any }) => {
 
@@ -74,7 +75,7 @@ const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any 
   return <div className="map-container-submit" ref={mapContainer}></div>;
 };
 
-const MapMain = (props: { data: any, id: string | undefined }) => {
+const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallback:any}) => {
 
 
 
@@ -339,10 +340,11 @@ const MapMain = (props: { data: any, id: string | undefined }) => {
         new maplibregl.Popup()
           .setLngLat([coordinates[0], coordinates[1]])
           .setHTML(
-            '<img class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>'
+            '<img id="popUpImg" class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>'
 
           )
           .addTo(map);
+          document.getElementById("popUpImg").onclick=props.openImgPopUpCallback
           // window.location.pathname=id;
           window.history.replaceState(null, "BadlyParked", id)
       });
@@ -416,16 +418,19 @@ const MapMain = (props: { data: any, id: string | undefined }) => {
       center: [coordinates[0], coordinates[1]],
       zoom: 10
     });
+    var img = <img onClick={()=>{console.log("zoom");props.openImgPopUpCallback()}} className={"popup_img"} src={"/api/img_thumb/" + id + ".WebP"}/> 
     const pop =new maplibregl.Popup();
       pop.setLngLat([coordinates[0], coordinates[1]])
       .setHTML(
-        '<img class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>'
+        '<img id="popUpImg" class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>'
          ).addTo(map);
       // pop.remove
 
       pop.on('close',()=>{
         console.log(window.location.pathname)
       })
+
+      document.getElementById("popUpImg").onclick=props.openImgPopUpCallback
 
       SetPopup(pop);
   }

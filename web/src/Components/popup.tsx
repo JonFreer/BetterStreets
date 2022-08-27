@@ -126,7 +126,9 @@ function PopUp(props: { id: string, data: any, closeCallback: any, updateCallbac
             <div className={styles.holder}>
                 <h4>{props.data.type}</h4>
                 <h3>Waiting Time : {Math.floor(props.data.time / 1000)}.{Math.floor((props.data.time % 1000) / 100)} Seconds</h3>
-                <div className="modal_footer">{Math.floor(time / 1000)}.{Math.floor((time % 1000) / 100)} Seconds
+                <div className="modal_footer">
+                    
+                    <div className ={styles.time}>{Math.floor(time / 1000)}.{Math.floor((time % 1000) / 100)} Seconds</div>
                     <div className="modal_button cancel" onClick={() => handleReset()}>Reset</div>
 
                     {isActive ?
@@ -139,7 +141,7 @@ function PopUp(props: { id: string, data: any, closeCallback: any, updateCallbac
                     }
                 </div>
 
-                <div className="modal_button save" onClick={() => submit()}>Submit</div>
+                <div className={ styles.submit+" modal_button save "} onClick={() => submit()}>Submit</div>
 
 
             </div>

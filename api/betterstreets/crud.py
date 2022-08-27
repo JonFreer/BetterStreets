@@ -18,7 +18,7 @@ def get_crossings(db: Session, limit_offset: Tuple[int, int]):
     submissions = db.query(models.Crossing).filter(models.Crossing.visible != False).filter(or_(or_(models.Crossing.type=="traffic_signals",models.Crossing.updated_type=="trafic_signals"),and_(models.Crossing.type=="",models.Crossing.updated_type==None))).all()
     return submissions
 
-def create_submission(db: Session, time:datetime, lat:float,lon:float,tags:Dict[str, Any])-> models.Submission:
+def create_submission(db: Session, time:datetime, lat:float,lon:float,tags:Dict[str, Any]):
     print("tags")
     print(tags['Cyclelane'])
     db_submission =  models.Submission(
@@ -32,14 +32,16 @@ def create_submission(db: Session, time:datetime, lat:float,lon:float,tags:Dict[
       tag_double_yellow=tags['Double Yellow']
     )
 
-    db.add(db_submission)
-    db.commit()
-    # _sync_pending_achievements(db, db_submission)
-    db.refresh(db_submission)
-
-    #once uploaded: save the file
-
-    return db_submission
+    try:
+        db.add(db_submission)
+        db.commit()
+        # _sync_pending_achievements(db, db_submission)
+        db.refresh(db_submission)
+        return db_submission
+    except:
+        #once uploaded: save the file
+        return None
+    
 
 def create_crossing(db:Session, id:int, lat:float,lon:float,type_:str)->models.Crossing:
     print("Creating Crossing")

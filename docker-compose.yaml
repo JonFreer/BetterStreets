@@ -1,6 +1,6 @@
 version: '3'
 services:
-  db:
+  db_bs:
     build: ./postgres
     restart: unless-stopped
     environment:
@@ -63,7 +63,7 @@ services:
         # - "traefik.http.routers.api.middlewares=api-prefix@file"
     environment:
       DOMAIN: "${DOMAIN:-betterstreets.localhost}"
-      DATABASE_URL: "postgresql://${API_DB_USERNAME}:${API_DB_PASSWORD}@db/api"
+      DATABASE_URL: "postgresql://${API_DB_USERNAME}:${API_DB_PASSWORD}@db_bs/api"
       ADMIN_LIST: "${ADMIN_LIST}"
       SESSION_SECRET: "${SESSION_SECRET}"
       DISCORD_OAUTH_CLIENT_ID: "${DISCORD_OAUTH_CLIENT_ID}"

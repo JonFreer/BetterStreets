@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "badlyparked"
+name = "betterstreets"
 version = "0.1.0"
 description = ""
 authors = ["jon"]
@@ -13,10 +13,10 @@ Authlib = "^0.15.4"
 httpx = "^0.19.0"
 itsdangerous = "^2.0.1"
 python-multipart = "^0.0.5"
-pillow ="^9.1.1" 
 aiofiles= "^0.8.0" 
 uvicorn = "^0.17.6"
 pydantic = "^1.9.1"
+overpy ="^0.6"
 
 [tool.poetry.dev-dependencies]
 build = "^0.7.0"
@@ -26,4 +26,4 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-db-init = 'badlyparked.models:init'
+db-init = 'betterstreets.models:init'

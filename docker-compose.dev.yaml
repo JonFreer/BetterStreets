@@ -6,7 +6,7 @@ services:
       context: ./web
       target: dev
     environment:
-      REACT_APP_HOST: ${DOMAIN:-badlyparked.localhost}
+      REACT_APP_HOST: ${DOMAIN:-betterstreets.localhost}
     # labels:
       # - "traefik.http.routers.web.rule=Host(`${DOMAIN:-badlyparked.localhost}`)"
     volumes:
@@ -41,9 +41,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.tls=true"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN:-badlyparked.localhost}`)"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN:-betterstreets.localhost}`)"
     environment:
-      DOMAIN: ${DOMAIN:-badlyparked.localhost}
+      DOMAIN: ${DOMAIN:-betterstreets.localhost}
     networks: 
       - traefik_web
 
@@ -59,6 +59,14 @@ services:
       # - "traefik.http.routers.api.rule=Host(`${DOMAIN:-api.badlyparked.localhost}`)"
     volumes:
       - "./api:/app"
+
+  admin:
+    build:
+      context: ./admin
+      target: dev
+    volumes:
+      - "./admin/src:/app/src"
+      - "./admin/public:/app/public"
 
 networks:
   traefik_web:

@@ -3,15 +3,15 @@ import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
 import { BrowserRouter, Routes, Route,useParams } from "react-router-dom";
 
 import { MapMain } from './map';
-import ImgPopUp from './imgPopUp';
+import PopUp from './popup';
 // class Main extends React.Component<{}, {}> {
 function Main() {
 
 
     const [data, setData] = useState<any>([]);
-    const [imgPopUpOpen, setImgPopUpOpen] = useState(false);
-    let { id } = useParams();
-
+    const [popupOpen, setPopUpOpen] = useState(false);
+    // let { id } = useParams();
+    const [id, setId] = useState<string>("0");
     function getData(){
         const requestOptions = {
             method: 'GET',
@@ -21,7 +21,7 @@ function Main() {
 
         
 
-        fetch('/api/submissions', requestOptions)
+        fetch('/api/crossings', requestOptions)
             .then(response => {
                 console.log(response)
                 if(response.status==200){
@@ -41,12 +41,16 @@ function Main() {
         getData();
     },[])
     
-
-    
+    // console.log("data",id)
+    // console.log(data.find(obj => {return obj.id=== id}))
         return (
             <>
-            {imgPopUpOpen?<ImgPopUp id={id} closeCallback={()=>{setImgPopUpOpen(false)}}  ></ImgPopUp>:<></>}
-            <MapMain data={data} id={id} openImgPopUpCallback={()=>{console.log("hi");setImgPopUpOpen(true)}} ></MapMain>
+            {/* {imgPopUpOpen?<ImgPopUp id={id} closeCallback={()=>{setImgPopUpOpen(false)}}  ></ImgPopUp>:<></>} */}
+            {popupOpen?<PopUp id={id} data={data.find(obj => {return obj.id== id})} closeCallback={()=>{setPopUpOpen(false); getData()}}  
+            updateCallback={()=>{getData()}}  ></PopUp>:<></>}
+            <MapMain data={data} id={id} openImgPopUpCallback={()=>{console.log("hi");setPopUpOpen(true)}}
+            setIdCallback={(id)=>{setId(id)}}
+            ></MapMain>
        </>)
     
 }

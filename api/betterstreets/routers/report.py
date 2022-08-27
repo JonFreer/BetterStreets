@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 import json
 from .. import crud, models, schemas, validate
 from ..dependencies import get_db
-from PIL import Image,ImageOps
+
 import io
 import os
 import time as t

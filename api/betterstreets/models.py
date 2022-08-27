@@ -1,9 +1,10 @@
 from email.policy import default
+from enum import unique
 import uuid
 from typing import Any, List
 from xmlrpc.client import boolean
 
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String,Float
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String,Float,Integer,BigInteger
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.ext.mutable import MutableDict
 from sqlalchemy.orm import Query, relationship
@@ -12,20 +13,25 @@ from sqlalchemy.sql import functions as func
 from .db import Base, engine
 
 class Submission(Base):
-    __tablename__ = "submissions"
+    __tablename__ = "submission"
 
-    id: uuid.UUID = Column(
-        UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4
-    )
+    id= Column( 
+        Integer, primary_key=True, index=True, nullable=False
+    ) #find the correct type
 
-    time =  Column(DateTime,nullable=False)
+class Crossing(Base):
+    __tablename__ = "crossings"
+
+    id= Column( 
+        BigInteger, primary_key=True, index=True, nullable=False
+    ) #find the correct type
+
+    time =  Column(Integer,nullable=True)
     lat = Column(Float,nullable=False)
     lon = Column(Float,nullable=False)
-    tag_cycle = Column(Boolean,nullable=False)
-    tag_corner = Column(Boolean,nullable=False)
-    tag_dropped = Column(Boolean,nullable=False)
-    tag_pavement = Column(Boolean,nullable=False)
-    tag_double_yellow = Column(Boolean,nullable=False)
+    type = Column(String,nullable=True)
+    updated_type = Column(String,nullable=True)
+    notes = Column(String,nullable=True)
     visible = Column(Boolean,default=True)
 
 # class User(Base):

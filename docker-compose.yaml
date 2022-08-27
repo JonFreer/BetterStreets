@@ -19,14 +19,14 @@ services:
         context: ./web
         # target: prod
         args:
-          REACT_APP_HOST: ${DOMAIN:-badlyparked.co.uk}
+          REACT_APP_HOST: ${DOMAIN:-betterstreets.co.uk}
       restart: unless-stopped
       labels:
         - "traefik.enable=true"
         - "traefik.http.services.web.loadbalancer.server.port=80"
         - "traefik.http.routers.web.tls.certresolver=letsEncrypt"
         - "traefik.http.routers.web.service=web"
-        - "traefik.http.routers.web.rule=Host(`${DOMAIN:-badlyparked.localhost}`)"
+        - "traefik.http.routers.web.rule=Host(`${DOMAIN:-betterstreets.localhost}`)"
         - "traefik.http.routers.web.tls=true"
       networks:
         - traefik_web
@@ -55,14 +55,14 @@ services:
       - "traefik.http.routers.api.tls=true"
       - "traefik.http.routers.api.tls.certresolver=letsEncrypt"
       -  "traefik.http.services.api.loadbalancer.server.port=80"
-      - "traefik.http.routers.api.rule=Host(`${DOMAIN:-badlyparked.localhost}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api.rule=Host(`${DOMAIN:-betterstreets.localhost}`) && PathPrefix(`/api`)"
       # - "traefik.http.routers.api.rule=Host(`${DOMAIN:-badlyparked.localhost}`) && PathPrefix(`/api`)"
       # - "traefik.http.routers.api.rule=Host(`${DOMAIN:-api.badlyparked.localhost}`)"
       - "traefik.http.middlewares.strip_api.stripprefix.prefixes=/api"
       - "traefik.http.routers.api.middlewares=strip_api"
         # - "traefik.http.routers.api.middlewares=api-prefix@file"
     environment:
-      DOMAIN: "${DOMAIN:-badlyparked.localhost}"
+      DOMAIN: "${DOMAIN:-betterstreets.localhost}"
       DATABASE_URL: "postgresql://${API_DB_USERNAME}:${API_DB_PASSWORD}@db/api"
       ADMIN_LIST: "${ADMIN_LIST}"
       SESSION_SECRET: "${SESSION_SECRET}"
@@ -73,6 +73,27 @@ services:
       EXTERNAL_API_TOKEN: "${EXTERNAL_API_TOKEN}"
     networks:
       - traefik_web
+
+  
+  admin:
+    # image: ghcr.io/hackthemidlands/htm-achievements/admin:${TAG}
+    build:
+      context: ./admin
+      # target: prod
+      # labels:
+      #   org.opencontainers.image.title: achievements-admin-ui
+      #   org.opencontainers.image.source: https://github.com/HackTheMidlands/htm-achievements
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.admin.loadbalancer.server.port=80"
+      - "traefik.http.routers.admin.service=admin"
+      - "traefik.http.routers.admin.rule=Host(`${DOMAIN:-betterstreets.localhost}`) && PathPrefix(`/admin`)"
+      - "traefik.http.routers.admin.priority=100"
+      # - "traefik.http.routers.admin.middlewares=admin-prefix@file"
+      - "traefik.http.middlewares.strip_admin.stripprefix.prefixes=/admin"
+      - "traefik.http.routers.admin.middlewares=strip_admin"
+      - "traefik.http.routers.admin.tls=true"
 
 networks:
   traefik_web:

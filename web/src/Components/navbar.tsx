@@ -7,20 +7,20 @@ class NavBar extends React.Component<{}, {}> {
 render(){
     return(<div className='navBar'>
         <Link className='navBar_title' to="/">
-        BadlyParked
+        BetterStreets
 
-        <div className="navBar_beta">Beta</div>
+        <div className="navBar_beta">Beta2</div>
         </Link>
 
         {/* <button className='navBar_button'> */}
 
-            <Link className='navBar_link' to="/about">
+            {/* <Link className='navBar_link' to="/about">
                 About
-            </Link>
+            </Link> */}
         
-            <Link className='navBar_submit' to="/submit">
+            {/* <Link className='navBar_submit' to="/submit">
                 <IoMdAddCircle className={"navBar_icon"}></IoMdAddCircle>Contribute
-            </Link>
+            </Link> */}
         
         {/* </button> */}
     </div>)

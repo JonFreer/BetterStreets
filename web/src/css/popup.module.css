@@ -1,0 +1,22 @@
+.outer{
+    /* max-width: 500px; */
+    position: absolute;
+    /* height:50px; */
+    /* background: white; */
+    width:100%;
+    bottom:10px;
+    z-index: 10;
+    /* border-radius: 10px; */
+}
+
+.holder{
+    max-width: 500px;
+    /* position: absolute; */
+    /* height:50px; */
+    background: white;
+    width:100%;
+    bottom:10px;
+    z-index: 10;
+    border-radius: 10px;
+    margin:auto;
+}

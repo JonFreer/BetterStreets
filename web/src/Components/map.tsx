@@ -75,7 +75,7 @@ const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any 
   return <div className="map-container-submit" ref={mapContainer}></div>;
 };
 
-const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallback:any}) => {
+const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallback:any, setIdCallback:any}) => {
 
 
 
@@ -146,6 +146,10 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
 
     //   // map.set
 
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log(position.coords.latitude, position.coords.longitude);
+    });
+
 
     map.on("load", function () {
       map.addSource('submissions', {
@@ -211,6 +215,15 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
       //     }
       //   }
       // );
+
+      map.addControl(
+        new maplibregl.GeolocateControl({
+        positionOptions: {
+        enableHighAccuracy: true
+        },
+        trackUserLocation: true
+        })
+        );
 
       map.addLayer({
         id: 'clusters',
@@ -324,29 +337,31 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
       });
       
       map.on('click', 'unclustered-point', function (e) {
+
+
         // let c = (features[0].geometry as Point).coordinates;
         var coordinates = (e.features[0].geometry as Point).coordinates.slice();
 
         var time = e.features[0].properties.time;
         var id = e.features[0].properties.id;
+        props.setIdCallback(id);
+        props.openImgPopUpCallback()
 
         // Ensure that if the map is zoomed out such that
         // multiple copies of the feature are visible, the
         // popup appears over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
+        // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        // }
 
-        new maplibregl.Popup()
-          .setLngLat([coordinates[0], coordinates[1]])
-          .setHTML(
-            '<img id="popUpImg" class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>'
-
-          )
-          .addTo(map);
-          document.getElementById("popUpImg").onclick=props.openImgPopUpCallback
+        // new maplibregl.Popup()
+        //   .setLngLat([coordinates[0], coordinates[1]])
+        //   .setHTML(
+        //     '<img id="popUpImg" class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>')
+        //   .addTo(map);
+        //   document.getElementById("popUpImg").onclick=props.openImgPopUpCallback
           // window.location.pathname=id;
-          window.history.replaceState(null, "BadlyParked", id)
+          window.history.replaceState(null, "BetterStreets", id)
       });
 
 
@@ -416,23 +431,23 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
 
     map.jumpTo({
       center: [coordinates[0], coordinates[1]],
-      zoom: 10
+      zoom: 18
     });
-    var img = <img onClick={()=>{console.log("zoom");props.openImgPopUpCallback()}} className={"popup_img"} src={"/api/img_thumb/" + id + ".WebP"}/> 
-    const pop =new maplibregl.Popup();
-      pop.setLngLat([coordinates[0], coordinates[1]])
-      .setHTML(
-        '<img id="popUpImg" class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>'
-         ).addTo(map);
-      // pop.remove
+    // var img = <img onClick={()=>{console.log("zoom");props.openImgPopUpCallback()}} className={"popup_img"} src={"/api/img_thumb/" + id + ".WebP"}/> 
+    // const pop =new maplibregl.Popup();
+    //   pop.setLngLat([coordinates[0], coordinates[1]])
+    //   .setHTML(
+    //     '<img id="popUpImg" class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>'
+    //      ).addTo(map);
+    //   // pop.remove
 
-      pop.on('close',()=>{
-        console.log(window.location.pathname)
-      })
+      // pop.on('close',()=>{
+      //   console.log(window.location.pathname)
+      // })
 
-      document.getElementById("popUpImg").onclick=props.openImgPopUpCallback
+      // document.getElementById("popUpImg").onclick=props.openImgPopUpCallback
 
-      SetPopup(pop);
+      // SetPopup(pop);
   }
 
   return <div className="map-container-main" ref={mapContainer}></div>;

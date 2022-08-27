@@ -1,7 +1,10 @@
+import string
 import uuid
 from datetime import datetime
 from typing import Any, Dict, Optional, Union
 from xmlrpc.client import boolean
+
+from pyparsing import stringStart
 
 from pydantic import BaseModel
 
@@ -28,6 +31,15 @@ class Submission(BaseModel):
     tag_dropped:bool
     tag_pavement:bool
     tag_double_yellow:bool
+
+class Crossing(BaseModel):
+    id:int
+    lat:float
+    lon:float
+    time:Optional[int]
+    type:Optional[str]
+    updated_type:Optional[str]
+    notes:Optional[str]
 
     class Config:
         orm_mode = True

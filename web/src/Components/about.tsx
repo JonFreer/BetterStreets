@@ -2,7 +2,7 @@ import styles from '../css/about.module.css';
 
 function About(){
 
-    return(<div><h1 className={styles.about_title}>BadlyParked</h1>
+    return(<div><h1 className={styles.about_title}>BetterStreets</h1>
         <h2 className={styles.about_subtitle}>Open Source Data Collection For Evidence Backed Change</h2>
         <div className={styles.about_box_holder}>
 

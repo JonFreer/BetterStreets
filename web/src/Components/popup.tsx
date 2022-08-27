@@ -110,6 +110,7 @@ function PopUp(props: { id: string, data: any, closeCallback: any, updateCallbac
         return (
             <div className={styles.outer}>
                 <div className={styles.holder}>
+                     <div className={styles.close} onClick={()=>{props.closeCallback()}}>x</div>
                     <div>Is this a crossing with traffic signals?</div>
                     <div className="modal_footer">
                     <div className="modal_button cancel" onClick={() => submit_type(false)}>No</div>
@@ -124,6 +125,7 @@ function PopUp(props: { id: string, data: any, closeCallback: any, updateCallbac
     return (
         <div className={styles.outer}>
             <div className={styles.holder}>
+                <div className={styles.close} onClick={()=>{props.closeCallback()}}>x</div>
                 <h4>{props.data.type}</h4>
                 <h3>Waiting Time : {Math.floor(props.data.time / 1000)}.{Math.floor((props.data.time % 1000) / 100)} Seconds</h3>
                 <div className="modal_footer">

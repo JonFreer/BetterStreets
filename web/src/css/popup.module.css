@@ -30,3 +30,19 @@
     margin-left:0px !important;
     margin-top:20px;
 }
+
+.close{
+    position: absolute;
+    /* right:10px; */
+    background: white;
+    height:20px;
+    width:20px;
+    border-color: black;
+    border-width: 1px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.close:hover{
+    /* background: whitesmoke; */
+}

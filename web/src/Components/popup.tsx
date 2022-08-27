@@ -67,6 +67,9 @@ function PopUp(props: { id: string, data: any, closeCallback: any, updateCallbac
     }
 
     function submit_type(signals){
+
+        console.log("Update type",signals);
+        
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -81,7 +84,15 @@ function PopUp(props: { id: string, data: any, closeCallback: any, updateCallbac
                     response.json().then((data) => {
                         // props.closeCallback()
                         console.log("success")
-                        props.updateCallback();
+
+                        if(signals){
+                            props.updateCallback();
+                        }else{
+                            props.closeCallback();
+                        }
+
+                        
+
                         // navigate("/")
                     });
                 } else {

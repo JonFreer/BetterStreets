@@ -15,7 +15,7 @@ def get_submissions(db: Session, limit_offset: Tuple[int, int]):
 
 def get_crossings(db: Session, limit_offset: Tuple[int, int]):
     limit, offset = limit_offset
-    submissions = db.query(models.Crossing).filter(models.Crossing.visible != False).filter(or_(or_(models.Crossing.type=="traffic_signals",models.Crossing.updated_type=="trafic_signals"),and_(models.Crossing.type=="",models.Crossing.updated_type==None))).all()
+    submissions = db.query(models.Crossing).filter(models.Crossing.visible != False).filter(or_(or_(models.Crossing.type=="traffic_signals",models.Crossing.updated_type=="traffic_signals"),and_(models.Crossing.type=="",models.Crossing.updated_type==None))).all()
     return submissions
 
 def create_submission(db: Session, time:datetime, lat:float,lon:float,tags:Dict[str, Any]):

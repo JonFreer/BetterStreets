@@ -36,7 +36,9 @@ class Crossing(BaseModel):
     id:int
     lat:float
     lon:float
-    time:Optional[int]
+    waiting_times:Optional[str]
+    crossing_times:Optional[str]
+    notes:Optional[str]
     type:Optional[str]
     updated_type:Optional[str]
     notes:Optional[str]

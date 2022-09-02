@@ -26,7 +26,9 @@ class Crossing(Base):
         BigInteger, primary_key=True, index=True, nullable=False
     ) #find the correct type
 
-    time =  Column(Integer,nullable=True)
+    waiting_times =  Column(String,nullable=True)
+    crossing_times = Column(String,nullable=True)
+    notes = Column(String,nullable=True)
     lat = Column(Float,nullable=False)
     lon = Column(Float,nullable=False)
     type = Column(String,nullable=True)

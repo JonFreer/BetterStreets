@@ -4,9 +4,17 @@
     /* height:50px; */
     /* background: white; */
     width:100%;
-    bottom:10px;
+    bottom:-100px;
     z-index: 10;
     /* border-radius: 10px; */
+    /* transform: translate(120px,0px); */
+    transition: bottom .225s cubic-bezier(0, 0, 0.2, 1);
+    /* overflow: hidden; */
+}
+
+.open {
+    bottom:-10px;
+    /* transform: translate(0px,0px); */
 }
 
 .holder{
@@ -14,13 +22,16 @@
     /* position: absolute; */
     /* height:50px; */
     background: white;
-    width:100%;
+    width:80%;
     bottom:10px;
     z-index: 10;
     border-radius: 10px;
     margin:auto;
     padding:20px;
+    box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24);
 }
+
+
 
 .time{
     margin-right:auto;
@@ -45,4 +56,8 @@
 
 .close:hover{
     /* background: whitesmoke; */
+}
+
+.modal_inner{
+    width:auto !important;
 }

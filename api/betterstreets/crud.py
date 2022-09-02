@@ -15,7 +15,7 @@ def get_submissions(db: Session, limit_offset: Tuple[int, int]):
 
 def get_crossings(db: Session, limit_offset: Tuple[int, int]):
     limit, offset = limit_offset
-    submissions = db.query(models.Crossing).filter(models.Crossing.visible != False).filter(or_(or_(models.Crossing.type=="traffic_signals",models.Crossing.updated_type=="traffic_signals"),and_(models.Crossing.type=="",models.Crossing.updated_type==None))).all()
+    submissions = db.query(models.Crossing).filter(models.Crossing.visible != False).filter(or_(or_(models.Crossing.type.contains("traffic_signals"),models.Crossing.updated_type=="traffic_signals"),and_(models.Crossing.type=="",models.Crossing.updated_type==None))).all()
     return submissions
 
 def create_submission(db: Session, time:datetime, lat:float,lon:float,tags:Dict[str, Any]):
@@ -57,10 +57,19 @@ def create_crossing(db:Session, id:int, lat:float,lon:float,type_:str)->models.C
     # _sync_pending_achievements(db, db_submission)
     db.refresh(db_submission)
 
-def set_time(db:Session, id: int, time:int)->models.Crossing:
+def set_time(db:Session, id: int, waiting_time:int,cossing_time :int)->models.Crossing:
     db_submission = db.query(models.Crossing).filter_by(id=id).first()
     print("got submission")
-    db_submission.time = time
+    if(db_submission.waiting_times == None):
+        db_submission.waiting_times = str(waiting_time)
+    else:
+        db_submission.waiting_times = db_submission.waiting_times + ","+str(waiting_time)
+
+    if(db_submission.crossing_times == None):
+        db_submission.crossing_times = str(cossing_time)
+    else:
+        db_submission.crossing_times = db_submission.crossing_times + ","+str(cossing_time)
+
     print("updated time")
     db.commit()
     print("updated time2")
@@ -85,3 +94,4 @@ def set_visibility(db: Session, id: int, visibility:bool):
     db.commit()
     db.refresh(db_submission)
     return db_submission
+

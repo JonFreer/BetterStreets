@@ -283,7 +283,7 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
         paint: {
           // 'circle-color': '#11b4da',
           'circle-color': '#ff7c17',
-          'circle-radius': 4,
+          'circle-radius': 8,
           'circle-stroke-width': 1,
           'circle-stroke-color': '#fff'
         }
@@ -429,9 +429,9 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
     //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     // }
 
-    map.jumpTo({
+    map.flyTo({
       center: [coordinates[0], coordinates[1]],
-      zoom: 18
+      zoom: 17
     });
     // var img = <img onClick={()=>{console.log("zoom");props.openImgPopUpCallback()}} className={"popup_img"} src={"/api/img_thumb/" + id + ".WebP"}/> 
     // const pop =new maplibregl.Popup();

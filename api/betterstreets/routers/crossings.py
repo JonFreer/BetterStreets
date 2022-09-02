@@ -83,7 +83,8 @@ def read_submissions(
 
 class TimeUpdate(BaseModel):
     id: int 
-    time: int 
+    waiting_time: int 
+    crossing_time: int
 
 
 @router.post("/set_time/", response_model=schemas.Crossing, tags=["crossings"])
@@ -97,7 +98,7 @@ def set_time(
     response.headers["X-Total-Count"] = str(5)
     # res = crud.get_submissions(db, (limit, offset))
     # print(res[0].time)
-    return crud.set_time(db, timeUpdate.id, timeUpdate.time)
+    return crud.set_time(db, timeUpdate.id, timeUpdate.waiting_time,timeUpdate.crossing_time)
 
 class TypeUpdate(BaseModel):
     id: int 

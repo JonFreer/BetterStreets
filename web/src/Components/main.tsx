@@ -46,8 +46,8 @@ function Main() {
         return (
             <>
             {/* {imgPopUpOpen?<ImgPopUp id={id} closeCallback={()=>{setImgPopUpOpen(false)}}  ></ImgPopUp>:<></>} */}
-            {popupOpen?<PopUp id={id} data={data.find(obj => {return obj.id== id})} closeCallback={()=>{setPopUpOpen(false); getData()}}  
-            updateCallback={()=>{getData()}}  ></PopUp>:<></>}
+            <PopUp open={popupOpen} id={id} data={data.find(obj => {return obj.id== id})} closeCallback={()=>{setPopUpOpen(false); getData()}}  
+            updateCallback={()=>{getData()}}  ></PopUp>
             <MapMain data={data} id={id} openImgPopUpCallback={()=>{console.log("hi");setPopUpOpen(true)}}
             setIdCallback={(id)=>{setId(id)}}
             ></MapMain>

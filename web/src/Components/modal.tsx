@@ -102,7 +102,7 @@ function ModalMetaData(props:{open:boolean,callbackSave:any, callbackCancel:any}
         }
 }
 
-export function ModalInput(props: { label: string, default: number, min: number, max: number, maxLen: number, callback: any }) {
+function ModalInput(props: { label: string, default: number, min: number, max: number, maxLen: number, callback: any }) {
     const [active, setActive] = useState(false);
 
     function onUpdate(event: ChangeEvent) {
@@ -140,4 +140,4 @@ export function ModalInput(props: { label: string, default: number, min: number,
         </div>)
 }
 
-export {ModalDateTime,ModalMetaData};
+export {ModalDateTime,ModalMetaData, ModalInput};

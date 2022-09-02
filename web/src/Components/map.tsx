@@ -6,6 +6,8 @@ import GeoJSONSource from 'maplibre-gl/src/source/geojson_source'
 import { Point } from 'geojson';
 import { LayoutRouteProps } from 'react-router-dom';
 import { renderToString } from 'react-dom/server'
+import harborne from '../JSON/harborne.json';
+import quinton from '../JSON/quinton.json';
 // import MapLayerEventType from
 const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any }) => {
 
@@ -215,6 +217,68 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
       //     }
       //   }
       // );
+
+      map.addSource('harborne', {
+        'type': 'geojson',
+        'data': {
+        'type': 'Feature',
+        'geometry': 
+           harborne
+    }})
+
+    map.addSource('quinton', {
+      'type': 'geojson',
+      'data': {
+      'type': 'Feature',
+      'geometry': 
+         quinton
+  }})
+
+    map.addLayer({
+      'id': 'harborne_fill',
+      'type': 'fill',
+      'source': 'harborne',
+      'layout': {},
+      'paint': {
+      'fill-color': '#088',
+      'fill-opacity': 0.1,
+      }
+      });
+
+      map.addLayer({
+        'id': 'harborne_line',
+        'type': 'line',
+        'source': 'harborne',
+        'layout': {},
+        'paint': {
+        'line-color': '#088',
+        'line-opacity': 1,
+        'line-width':2
+        }
+        });
+
+        map.addLayer({
+          'id': 'quinton_fill',
+          'type': 'fill',
+          'source': 'quinton',
+          'layout': {},
+          'paint': {
+          'fill-color': '#ff4118',
+          'fill-opacity': 0.1,
+          }
+          });
+    
+          map.addLayer({
+            'id': 'quinton_line',
+            'type': 'line',
+            'source': 'quinton',
+            'layout': {},
+            'paint': {
+            'line-color': '#ff4118',
+            'line-opacity': 1,
+            'line-width':2
+            }
+            });
 
       map.addControl(
         new maplibregl.GeolocateControl({

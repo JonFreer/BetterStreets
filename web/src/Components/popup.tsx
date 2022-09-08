@@ -203,15 +203,17 @@ function PopUp(props: { open:boolean,id: string, data: any, closeCallback: any, 
                             callback={(val: number) => {
                               setCrossingTime(val*1000)
                             }} />
+                    </div>
+                    <div className = {styles.timer_button_holder}>
                     {/* <div className ={styles.time}>Waiting Time: {Math.floor(time / 1000)}.{Math.floor((time % 1000) / 100)} Seconds</div> */}
-                    <div className="modal_button cancel" onClick={() => handleReset()}>Reset</div>
-
+                    <div className={styles.no_margin+" modal_button cancel"} onClick={() => handleReset()}>Reset</div>
+                    
                     {isActive ?
                         (stage == 0 ?
-                            <div className="modal_button save" onClick={() => handleMove()}>Next</div>
-                            : <div className="modal_button save" onClick={() => handlePauseResume()}>Stop</div>
+                            <div className={styles.no_margin+" modal_button save"} onClick={() => handleMove()}>Next</div>
+                            : <div className={styles.no_margin+" modal_button save"} onClick={() => handlePauseResume()}>Stop</div>
                         ) :
-                        <div className="modal_button save" onClick={() => handleStart()}>Start</div>
+                        <div className={styles.no_margin+" modal_button save"} onClick={() => handleStart()}>Start</div>
                     }
 
 

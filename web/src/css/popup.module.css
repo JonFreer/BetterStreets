@@ -61,3 +61,55 @@
 .modal_inner{
     width:auto !important;
 }
+
+.notes_heading{
+    color: #5f6368;
+    opacity: 1;
+    padding-top: 10px;
+    font-family: Roboto, Arial, sans-serif;
+    line-height: 1.25rem;
+    font-size: .875rem;
+    letter-spacing: .0142857143em;
+    font-weight: 400;
+    /* float: left; */
+    text-align: left;
+}
+
+.modal_times {
+    padding: 0px 0px 0px;
+    display: flex;
+    flex-shrink: 0;
+    box-pack: end;
+    justify-content: flex-end;
+}
+
+/* .notes_main{
+
+    padding: 0px 10px;
+    background-color: #e6e6e6;
+    margin:auto;
+    margin-top:15px;
+    padding:10px;
+    border-radius: 5px;
+    color: #3c4043;
+    font-size: 0.9rem;
+    user-select: none;
+    cursor: pointer;
+
+} */
+
+.notes_main{
+
+    padding: 0px 10px;
+    background-color: #fbfbfb;
+    margin:auto;
+    margin-top:10px;
+    padding:10px;
+    border-radius: 5px;
+    color: #3c4043;
+    font-size: 0.9rem;
+    user-select: none;
+    cursor: pointer;
+    text-align: left;
+
+}

@@ -99,7 +99,6 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
   function data2geojson() {
     const tempData = []
     for (let i = 0; i < props.data.length; i++) {
-      console.log(props.data[i].lon)
       tempData.push({
         "type": "Feature",
         "geometry": {

@@ -2,6 +2,7 @@ import styles from '../css/popup.module.css';
 import { BsFlagFill } from 'react-icons/bs';
 import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
 import { preProcessFile } from 'typescript';
+import { ModalMetaData, ModalTextInput } from './modal';
 // import { ModalInput } from './modal';
 
 function PopUp(props: { open:boolean,id: string, data: any, closeCallback: any, updateCallback:any }) {
@@ -11,7 +12,24 @@ function PopUp(props: { open:boolean,id: string, data: any, closeCallback: any, 
     const [waitingTime, setWaitingTime] = useState(0);
     const [crossingTime, setCrossingTime] = useState(0);
     const [stage,setStage] = useState(0);
+    const [notesModalOpen,setNotesModalOpen] = useState(false)
+    const [notes,setNotes] = useState("")
 
+ 
+
+    useEffect(() => {    
+        if( props.data == undefined){
+            setNotes("")
+            return;
+        }
+        if(props.data.notes != null){
+                let notes_list = props.data.notes.split(",")
+                setNotes(notes_list[notes_list.length-1])
+        }else{
+            setNotes("")
+        }
+        // Update the document title using the browser API    document.title = `You clicked ${count} times`;  
+    },[props.data]);
 
     React.useEffect(() => {
         let interval = null;
@@ -62,7 +80,7 @@ function PopUp(props: { open:boolean,id: string, data: any, closeCallback: any, 
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: parseInt(props.id), waiting_time: waitingTime,crossing_time:crossingTime })
+            body: JSON.stringify({ id: parseInt(props.id), waiting_time: waitingTime,crossing_time:crossingTime,notes:notes })
         };
 
 
@@ -155,18 +173,21 @@ function PopUp(props: { open:boolean,id: string, data: any, closeCallback: any, 
         let crossing_times_list = props.data.crossing_times.split(",")
         crossing_time = crossing_times_list[crossing_times_list.length-1]
     }
+
+   
     // const waiting_time = props.data.waiting_times;
     
 
     return (
+        <>
         <div id="modal" className={styles.outer}>
             <div className={styles.holder}>
-                <div className={styles.close} onClick={()=>{props.closeCallback()}}>x</div>
+                {/* <div className={styles.close} onClick={()=>{props.closeCallback()}}>x</div> */}
                 {/* <h4>{waitingTime}:{crossingTime}</h4> */}
                 {/* <h3>Waiting Time : {Math.floor(waiting_time/ 1000)}.{Math.floor((waiting_time % 1000) / 100)} Seconds</h3> */}
 
-
-                <div className="modal_footer">
+                <div className={styles.notes_heading}>Times</div>
+                <div className={styles.modal_times}>
                     
                     <ModalInput label="Waiting (s)" default={waitingTime==0?Math.floor(waiting_time/100)/10:Math.floor(waitingTime/100)/10} min={0} max={1000} maxLen={12}
                             id={"waiting_input"}
@@ -195,12 +216,40 @@ function PopUp(props: { open:boolean,id: string, data: any, closeCallback: any, 
 
 
                 </div>
+                <div className={styles.notes_holder}>
+                    
+                    <div className={styles.notes_heading}>Notes</div>
+                    {notes!=""?
+                    <div onClick={()=>setNotesModalOpen(true)} className={styles.notes_main}>{notes}</div>:
+                    <div onClick={()=>setNotesModalOpen(true)}className={styles.notes_main}>Click to add notes</div>
 
+                }
+                </div>
                 <div className={ styles.submit+" modal_button save "} onClick={() => submit()}>Submit</div>
 
 
             </div>
+       
         </div>
+        <ModalTextInput open={notesModalOpen}
+
+                text={notes}
+                    
+                callbackSave={(notes) => {
+                    setNotesModalOpen(false);
+                    setNotes(notes);
+                    // setMetaModalActive(false);
+                    // updateMetaDate(metaData);
+                    // this.setState({ metadataModalActive: false })
+
+                }}
+                callbackCancel={() => {
+                    // setMetaModalActive(false);
+                    setNotesModalOpen(false)
+                    // this.setState({ metadataModalActive: false })
+
+                }}></ModalTextInput>
+        </>
     )}
     else{
         document.getElementById('modal')?.classList.remove(styles.open);

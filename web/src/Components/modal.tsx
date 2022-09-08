@@ -102,6 +102,50 @@ function ModalMetaData(props:{open:boolean,callbackSave:any, callbackCancel:any}
         }
 }
 
+
+function ModalTextInput(props:{open:boolean,callbackSave:any, callbackCancel:any,text:string}){
+    // useEffect(() => {
+    //     document.getElementById('modal')?.classList.add('open');
+    // })
+
+    
+    if(props.open){
+        setTimeout(()=>document.getElementById('modal_notes')?.classList.add('open'),1)
+        return(
+            
+            <div className='modal_holder'>
+                        <div id="modal_notes" className='TimeDateModal'>
+                            <div className='modal_head'>
+                                <div>Update Notes</div>
+                                {/* <div className='modal_current_date'>
+                                    The image you have uploaded has its own location or date attached. Do you want to update the existing data?
+                                </div> */}
+                                <textarea id="modal_text" defaultValue={props.text} className={"modal_text_area"} name="Text1" cols={40} rows={5}></textarea>
+                            </div>
+    
+                            
+                            <div className="modal_footer">
+                                <div className="modal_button cancel" onClick={()=>props.callbackCancel()}>Cancel</div>
+                                <div className="modal_button save" onClick={()=>{
+                                    props.callbackSave((document.getElementById("modal_text") as HTMLTextAreaElement).value);
+                                
+                                }}>Update</div>
+                            </div>
+    
+    
+                        </div>
+    
+    
+                    </div>
+                
+        )
+        
+    }else{
+            document.getElementById('modal_notes')?.classList.remove('open');
+            return(<></>)
+        }
+}
+
 function ModalInput(props: { label: string, default: number, min: number, max: number, maxLen: number, callback: any }) {
     const [active, setActive] = useState(false);
 
@@ -140,4 +184,4 @@ function ModalInput(props: { label: string, default: number, min: number, max: n
         </div>)
 }
 
-export {ModalDateTime,ModalMetaData, ModalInput};
+export {ModalDateTime,ModalMetaData, ModalInput,ModalTextInput};

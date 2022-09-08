@@ -92,8 +92,14 @@ input[type="file"] {
     top: 0px;
     left: 0px;
     display: flex;
+    z-index: 100;
+}
 
-
+.modal_text_area{
+    /* border-radius: 5px; */
+    margin-top:20px;
+    font-family: Montserrat Bold, sans-serif;
+    padding:6px;
 }
 
 

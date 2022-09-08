@@ -57,7 +57,7 @@ def create_crossing(db:Session, id:int, lat:float,lon:float,type_:str)->models.C
     # _sync_pending_achievements(db, db_submission)
     db.refresh(db_submission)
 
-def set_time(db:Session, id: int, waiting_time:int,cossing_time :int)->models.Crossing:
+def set_time_and_notes(db:Session, id: int, waiting_time:int,cossing_time :int,notes:str)->models.Crossing:
     db_submission = db.query(models.Crossing).filter_by(id=id).first()
     print("got submission")
     if(db_submission.waiting_times == None):
@@ -69,6 +69,12 @@ def set_time(db:Session, id: int, waiting_time:int,cossing_time :int)->models.Cr
         db_submission.crossing_times = str(cossing_time)
     else:
         db_submission.crossing_times = db_submission.crossing_times + ","+str(cossing_time)
+
+    if(db_submission.notes == None):
+        db_submission.notes = str(notes)
+    else:
+        db_submission.notes = db_submission.notes + ","+str(notes)
+
 
     print("updated time")
     db.commit()

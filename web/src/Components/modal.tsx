@@ -120,7 +120,7 @@ function ModalTextInput(props:{open:boolean,callbackSave:any, callbackCancel:any
                                 {/* <div className='modal_current_date'>
                                     The image you have uploaded has its own location or date attached. Do you want to update the existing data?
                                 </div> */}
-                                <textarea id="modal_text" defaultValue={props.text} className={"modal_text_area"} name="Text1" cols={40} rows={5}></textarea>
+                                <textarea id="modal_text" defaultValue={props.text} className={"modal_text_area"} name="Text1" rows={5}></textarea>
                             </div>
     
                             

@@ -27,6 +27,25 @@ function Main() {
                 if(response.status==200){
                     response.json().then((data) => {
                         console.log(data)
+                        // Set the current state of the crossings
+                        // 0: Undefined crossing
+                        // 1: Traffic singals with no data
+                        // 2: Complete crossing
+                        for(let i = 0; i< data.length;i++){
+                            if((data[i].type==null||!data[i].type.includes("traffic_signals")) && (data[i].updated_type==null||!data[i].updated_type.includes("traffic_signals"))){
+                                data[i].state = 0;
+                            }else{
+                                if(data[i].waiting_times!="" && data[i].waiting_times!= null){
+                                    
+                                    data[i].state = 2;
+                                }else{
+
+                                    data[i].state = 1;
+                                }
+                                
+                            }
+                        }
+
                         setData(data)
                             // navigate("/")     
                     });

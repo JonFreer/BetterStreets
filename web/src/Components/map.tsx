@@ -106,7 +106,8 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
           "coordinates": [props.data[i].lon, props.data[i].lat]
         }, "properties": {
           "time": props.data[i].time,
-          "id": props.data[i].id
+          "id": props.data[i].id,
+          "state":props.data[i].state,
         }
       })
     }
@@ -132,9 +133,9 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
       'https://api.maptiler.com/maps/openstreetmap/style.json?key=2pdGAnnIuClGHUCta2TU';
 
     const initialState = {
-      lng: -1.78,
-      lat: 52.37,
-      zoom: 10,
+      lng: -1.9754200516660276,
+      lat:52.46070394113771,
+      zoom: 12,
     };
 
     //   console.log(props.markerLat, props.markerLon)
@@ -162,60 +163,8 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
 
       });
 
-      // map.addLayer(
-      //   {
-      //     'id': 'earthquakes-point',
-      //     'type': 'circle',
-      //     'source': 'submissions',
-      //     'minzoom': 7,
-      //     'paint': {
-      //       // Size circle radius by earthquake magnitude and zoom level
-      //       'circle-radius': [
-      //         'interpolate',
-      //         ['linear'],
-      //         ['zoom'],
-      //         15,
-      //         8,
-      //         16,
-      //         // 4,
-      //         // ['interpolate', ['linear'], ['get', 'mag'], 1, 1, 6, 4],
-      //         8,
-      //         // 50
-      //         // ['interpolate', ['linear'], ['get', 'mag'], 1, 5, 6, 50]
-      //       ],
-      //       // Color circle by earthquake magnitude
-      //       'circle-color': 'rgb(33,102,172)',
-      //       //   'interpolate',
-      //       //   ['linear'],
-      //       //   // ['get', 'mag'],
-      //       //   1,
-      //       //   'rgba(33,102,172,0)',
-      //       //   2,
-      //       //   'rgb(103,169,207)',
-      //       //   3,
-      //       //   'rgb(209,229,240)',
-      //       //   4,
-      //       //   'rgb(253,219,199)',
-      //       //   5,
-      //       //   'rgb(239,138,98)',
-      //       //   6,
-      //       //   'rgb(178,24,43)'
-      //       // ],
-      //       'circle-stroke-color': 'white',
-      //       'circle-stroke-width': 1,
-      //       // Transition from heatmap to circle layer by zoom level
-      //       'circle-opacity': [
-      //         'interpolate',
-      //         ['linear'],
-      //         ['zoom'],
-      //         7,
-      //         0,
-      //         8,
-      //         1
-      //       ]
-      //     }
-      //   }
-      // );
+
+
 
       map.addSource('harborne', {
         'type': 'geojson',
@@ -292,6 +241,7 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
         id: 'clusters',
         type: 'circle',
         source: 'submissions',
+        // filter: ["all",['has', 'point_count'], ['==', 'state', 0]],
         filter: ['has', 'point_count'],
         paint: {
           // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
@@ -338,19 +288,50 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
       });
 
       map.addLayer({
-        id: 'unclustered-point',
+        id: 'unclustered-point-0',
         type: 'circle',
         source: 'submissions',
 
-        filter: ['!', ['has', 'point_count']],
+        filter: ['==', 'state', 0],
         paint: {
           // 'circle-color': '#11b4da',
-          'circle-color': '#ff7c17',
+          'circle-color': '#ff0505',
           'circle-radius': 8,
           'circle-stroke-width': 1,
           'circle-stroke-color': '#fff'
         }
       });
+
+      map.addLayer({
+        id: 'unclustered-point-1',
+        type: 'circle',
+        source: 'submissions',
+
+        filter: ['==', 'state', 1],
+        paint: {
+          // 'circle-color': '#11b4da',
+          'circle-color': '#ff7b00',
+          'circle-radius': 8,
+          'circle-stroke-width': 1,
+          'circle-stroke-color': '#fff'
+        }
+      });
+
+      map.addLayer({
+        id: 'unclustered-point-2',
+        type: 'circle',
+        source: 'submissions',
+
+        filter: ['==', 'state', 2],
+        paint: {
+          // 'circle-color': '#11b4da',
+          'circle-color': '#1fbf27',
+          'circle-radius': 8,
+          'circle-stroke-width': 1,
+          'circle-stroke-color': '#fff'
+        }
+      });
+
 
       //   map.on('click', 'clusters', (e) => {
       //     const features = map.queryRenderedFeatures(e.point, {
@@ -399,31 +380,24 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
         }
       });
       
-      map.on('click', 'unclustered-point', function (e) {
-
-
-        // let c = (features[0].geometry as Point).coordinates;
-        var coordinates = (e.features[0].geometry as Point).coordinates.slice();
-
-        var time = e.features[0].properties.time;
+      map.on('click', 'unclustered-point-1', function (e) {
         var id = e.features[0].properties.id;
         props.setIdCallback(id);
         props.openImgPopUpCallback()
+          window.history.replaceState(null, "BetterStreets", id)
+      });
 
-        // Ensure that if the map is zoomed out such that
-        // multiple copies of the feature are visible, the
-        // popup appears over the copy being pointed to.
-        // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        // }
+      map.on('click', 'unclustered-point-0', function (e) {
+        var id = e.features[0].properties.id;
+        props.setIdCallback(id);
+        props.openImgPopUpCallback()
+          window.history.replaceState(null, "BetterStreets", id)
+      });
 
-        // new maplibregl.Popup()
-        //   .setLngLat([coordinates[0], coordinates[1]])
-        //   .setHTML(
-        //     '<img id="popUpImg" class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>')
-        //   .addTo(map);
-        //   document.getElementById("popUpImg").onclick=props.openImgPopUpCallback
-          // window.location.pathname=id;
+      map.on('click', 'unclustered-point-2', function (e) {
+        var id = e.features[0].properties.id;
+        props.setIdCallback(id);
+        props.openImgPopUpCallback()
           window.history.replaceState(null, "BetterStreets", id)
       });
 

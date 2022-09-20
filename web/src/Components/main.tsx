@@ -38,8 +38,13 @@ function Main() {
                                 if(data[i].waiting_times!="" && data[i].waiting_times!= null){
                                     
                                     data[i].state = 2;
-                                }else{
+                                     if(data[i].waiting_times.split(",")[data[i].waiting_times.split(",").length-1]==0){
+                                        data[i].state = 1;
+                                     }
+                                
 
+                                    
+                                }else{
                                     data[i].state = 1;
                                 }
                                 

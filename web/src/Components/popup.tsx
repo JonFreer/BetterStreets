@@ -28,8 +28,19 @@ function PopUp(props: { open:boolean,id: string, data: any, closeCallback: any, 
         }else{
             setNotes("")
         }
+        
         // Update the document title using the browser API    document.title = `You clicked ${count} times`;  
     },[props.data]);
+
+    //When the id changes reset the timers
+    useEffect(()=>{
+        setIsActive(false);
+        setIsPaused(true);
+        setWaitingTime(0);
+        setCrossingTime(0);
+        // setNotes("");
+        setStage(0);
+    },[props.id])
 
     React.useEffect(() => {
         let interval = null;
@@ -74,13 +85,32 @@ function PopUp(props: { open:boolean,id: string, data: any, closeCallback: any, 
 
     function submit() {
 
+        var input_crossing_time = 0;
+        if(crossingTime == 0){
+            if(props.data.crossing_times != null){
+                let crossing_times_list = props.data.crossing_times.split(",")
+                input_crossing_time = crossing_times_list[crossing_times_list.length-1]
+            }
+        }else{
+            input_crossing_time = crossingTime;
+        }
 
+        var input_waiting_time = 0;
+        if(waitingTime == 0){
+            if(props.data.waiting_times != null){
+                let waiting_times_list = props.data.waiting_times.split(",")
+                input_waiting_time = waiting_times_list[waiting_times_list.length-1]
+            }
+        }else{
+            input_waiting_time = waitingTime;
+        }
 
+        console.log("submitting: %f %f %s ",input_waiting_time,input_crossing_time,notes)
 
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: parseInt(props.id), waiting_time: waitingTime,crossing_time:crossingTime,notes:notes })
+            body: JSON.stringify({ id: parseInt(props.id), waiting_time: input_waiting_time,crossing_time:input_crossing_time,notes:notes })
         };
 
 

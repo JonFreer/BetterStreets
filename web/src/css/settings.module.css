@@ -1,0 +1,51 @@
+.sidebar{
+    position: absolute;
+height: 100%;
+background: white;
+width: 300px;
+z-index: 8;
+box-shadow: -1px 0px 2px 0 var(--gm-fillbutton-keyshadow-color,rgba(60,64,67,.3)),0px 0px 1px 1px var(--gm-fillbutton-ambientshadow-color,rgba(60,64,67,.15));
+padding:20px;
+text-align: left;
+left: -350px;
+transition: left .225s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.open{
+    left:0px;
+}
+
+.sidebar_title{
+    font-size: 20px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.184);
+    padding-bottom: 10px;
+}
+
+.sidebar_check{
+    padding-top: 10px;
+    font-size:15px;
+}
+
+.sidebar_label{
+    padding-left:10px;
+}
+
+.close{
+    background: white;
+    z-index: 5;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    /* box-shadow: -1px 0px 2px 0 var(--gm-fillbutton-keyshadow-color,rgba(60,64,67,.3)),0px 0px 1px 1px var(--gm-fillbutton-ambientshadow-color,rgba(60,64,67,.15)); */
+    user-select: none;
+    cursor: pointer;
+    border: none;
+
+  }
+
+  .close:hover{
+    background: #fafafa;
+  }

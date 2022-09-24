@@ -10,6 +10,9 @@ import harborne from '../JSON/harborne.json';
 import quinton from '../JSON/quinton.json';
 import svg from '../resources/green_pin_shadow.png';
 import question_png from '../resources/question_pin_shadow.png';
+import {GiHamburgerMenu} from 'react-icons/gi'
+import SideBarSettings from './sidesettings';
+
 // import MapLayerEventType from
 const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any }) => {
 
@@ -86,6 +89,12 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
   const mapContainer = useRef<any>(null);
   const [map, SetMap] = useState<any>(null);
   const [popup, SetPopup] = useState<any>(null);
+  const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
+  const [settings,setSettings] = useState<any>({
+    "completed":true,
+    "incomplete":true,
+    "unclassified":true
+  })
   // const [markers, SetMarkers] = useState<any>([]);
   // const [startLat, setStartLat] = useState(props.markerLat)
   // 
@@ -98,21 +107,46 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
   //     // mapContainer.current
   //   }
   // }, [props.startLat]);
+
+  useEffect(()=>{
+    if(map == null){
+      return;
+    }
+
+    if(map.getSource('submissions')== null){
+      return;
+    }
+    map.getSource('submissions').setData( 
+   data2geojson()
+      // cluster: true,
+      // clusterMaxZoom: 13, // Max zoom to cluster points on
+      // clusterRadius: 40 // Radius of each cluster when clustering points (defaults to 50)
+    );
+
+  },[settings])
+
+
   function data2geojson() {
+
     const tempData = []
     for (let i = 0; i < props.data.length; i++) {
-      tempData.push({
-        "type": "Feature",
-        "geometry": {
-          "type": "Point",
-          "coordinates": [props.data[i].lon, props.data[i].lat]
-        }, "properties": {
-          "time": props.data[i].time,
-          "id": props.data[i].id,
-          "state":props.data[i].state,
-        }
-      })
+
+      if(props.data[i].state == 0 && settings.unclassified || props.data[i].state == 1 && settings.incomplete || props.data[i].state == 2 && settings.completed){
+
+        tempData.push({
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [props.data[i].lon, props.data[i].lat]
+          }, "properties": {
+            // "time": props.data[i].time,
+            "id": props.data[i].id,
+            "state":props.data[i].state,
+          }
+        })
     }
+    }
+
     return ({
       "type": "FeatureCollection",
       "features": tempData
@@ -525,7 +559,14 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
       // SetPopup(pop);
   }
 
-  return <div className="map-container-main" ref={mapContainer}></div>;
+  return <div className="map-container-main" ref={mapContainer}>
+    <button className="menu-button" onClick={()=>{setSettingsOpen(true)}}><GiHamburgerMenu></GiHamburgerMenu></button>
+    <SideBarSettings 
+    settings={settings} 
+    updateCallback={(val)=>{setSettings(val)}}
+    closeCallback={()=>{setSettingsOpen(false)}} 
+    open={settingsOpen}></SideBarSettings>
+  </div>;
 };
 
 export { MapSubmit, MapMain };    

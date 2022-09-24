@@ -50,3 +50,18 @@
   .maplibregl-popup-close-button:hover{
     background: rgb(247, 247, 247);
   }
+
+  .menu-button{
+    background: white;
+    z-index: 5;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    box-shadow: -1px 0px 2px 0 var(--gm-fillbutton-keyshadow-color,rgba(60,64,67,.3)),0px 0px 1px 1px var(--gm-fillbutton-ambientshadow-color,rgba(60,64,67,.15));
+    user-select: none;
+    cursor: pointer;
+    border: none;
+  }

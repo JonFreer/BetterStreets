@@ -10,7 +10,8 @@ import harborne from '../JSON/harborne.json';
 import quinton from '../JSON/quinton.json';
 import svg from '../resources/green_pin_shadow.png';
 import question_png from '../resources/question_pin_shadow.png';
-import {GiHamburgerMenu} from 'react-icons/gi'
+import tick_png from '../resources/tick_pin_shadow.png'
+import { GiHamburgerMenu } from 'react-icons/gi'
 import SideBarSettings from './sidesettings';
 
 // import MapLayerEventType from
@@ -82,7 +83,7 @@ const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any 
   return <div className="map-container-submit" ref={mapContainer}></div>;
 };
 
-const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallback:any, setIdCallback:any}) => {
+const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallback: any, setIdCallback: any }) => {
 
 
 
@@ -90,10 +91,10 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
   const [map, SetMap] = useState<any>(null);
   const [popup, SetPopup] = useState<any>(null);
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
-  const [settings,setSettings] = useState<any>({
-    "completed":true,
-    "incomplete":true,
-    "unclassified":true
+  const [settings, setSettings] = useState<any>({
+    "completed": true,
+    "incomplete": true,
+    "unclassified": true
   })
   // const [markers, SetMarkers] = useState<any>([]);
   // const [startLat, setStartLat] = useState(props.markerLat)
@@ -108,22 +109,22 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
   //   }
   // }, [props.startLat]);
 
-  useEffect(()=>{
-    if(map == null){
+  useEffect(() => {
+    if (map == null) {
       return;
     }
 
-    if(map.getSource('submissions')== null){
+    if (map.getSource('submissions') == null) {
       return;
     }
-    map.getSource('submissions').setData( 
-   data2geojson()
+    map.getSource('submissions').setData(
+      data2geojson()
       // cluster: true,
       // clusterMaxZoom: 13, // Max zoom to cluster points on
       // clusterRadius: 40 // Radius of each cluster when clustering points (defaults to 50)
     );
 
-  },[settings])
+  }, [settings])
 
 
   function data2geojson() {
@@ -131,7 +132,7 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
     const tempData = []
     for (let i = 0; i < props.data.length; i++) {
 
-      if(props.data[i].state == 0 && settings.unclassified || props.data[i].state == 1 && settings.incomplete || props.data[i].state == 2 && settings.completed){
+      if (props.data[i].state == 0 && settings.unclassified || props.data[i].state == 1 && settings.incomplete || props.data[i].state == 2 && settings.completed) {
 
         tempData.push({
           "type": "Feature",
@@ -141,10 +142,10 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
           }, "properties": {
             // "time": props.data[i].time,
             "id": props.data[i].id,
-            "state":props.data[i].state,
+            "state": props.data[i].state,
           }
         })
-    }
+      }
     }
 
     return ({
@@ -153,12 +154,12 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
     });
   }
 
-  useEffect(()=>{
-    if(props.id!= undefined){
+  useEffect(() => {
+    if (props.id != undefined) {
       addModal(props.id);
     }
-    
-  },[props.id, props.data,map])
+
+  }, [props.id, props.data, map])
 
   useEffect(() => {
     // This API key is for use only in stackblitz.com
@@ -170,7 +171,7 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
 
     const initialState = {
       lng: -1.9754200516660276,
-      lat:52.46070394113771,
+      lat: 52.46070394113771,
       zoom: 12,
     };
 
@@ -205,28 +206,30 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
       map.addSource('harborne', {
         'type': 'geojson',
         'data': {
-        'type': 'Feature',
-        'geometry': 
-           harborne
-    }})
+          'type': 'Feature',
+          'geometry':
+            harborne
+        }
+      })
 
-    map.addSource('quinton', {
-      'type': 'geojson',
-      'data': {
-      'type': 'Feature',
-      'geometry': 
-         quinton
-  }})
+      map.addSource('quinton', {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'geometry':
+            quinton
+        }
+      })
 
-    map.addLayer({
-      'id': 'harborne_fill',
-      'type': 'fill',
-      'source': 'harborne',
-      'layout': {},
-      'paint': {
-      'fill-color': '#088',
-      'fill-opacity': 0.1,
-      }
+      map.addLayer({
+        'id': 'harborne_fill',
+        'type': 'fill',
+        'source': 'harborne',
+        'layout': {},
+        'paint': {
+          'fill-color': '#088',
+          'fill-opacity': 0.1,
+        }
       });
 
       map.addLayer({
@@ -235,43 +238,43 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
         'source': 'harborne',
         'layout': {},
         'paint': {
-        'line-color': '#088',
-        'line-opacity': 1,
-        'line-width':2
+          'line-color': '#088',
+          'line-opacity': 1,
+          'line-width': 2
         }
-        });
+      });
 
-        map.addLayer({
-          'id': 'quinton_fill',
-          'type': 'fill',
-          'source': 'quinton',
-          'layout': {},
-          'paint': {
+      map.addLayer({
+        'id': 'quinton_fill',
+        'type': 'fill',
+        'source': 'quinton',
+        'layout': {},
+        'paint': {
           'fill-color': '#ff4118',
           'fill-opacity': 0.1,
-          }
-          });
-    
-          map.addLayer({
-            'id': 'quinton_line',
-            'type': 'line',
-            'source': 'quinton',
-            'layout': {},
-            'paint': {
-            'line-color': '#ff4118',
-            'line-opacity': 1,
-            'line-width':2
-            }
-            });
+        }
+      });
+
+      map.addLayer({
+        'id': 'quinton_line',
+        'type': 'line',
+        'source': 'quinton',
+        'layout': {},
+        'paint': {
+          'line-color': '#ff4118',
+          'line-opacity': 1,
+          'line-width': 2
+        }
+      });
 
       map.addControl(
         new maplibregl.GeolocateControl({
-        positionOptions: {
-        enableHighAccuracy: true
-        },
-        trackUserLocation: true
+          positionOptions: {
+            enableHighAccuracy: true
+          },
+          trackUserLocation: true
         })
-        );
+      );
 
       map.addLayer({
         id: 'clusters',
@@ -330,17 +333,17 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
           id: 'unclustered-point-1',
           type: 'symbol',
           source: 'submissions',
-  
+
           filter: ['==', 'state', 1],
           layout: {
             'icon-image': 'green_pin',
             'icon-size': 0.3,
-            'icon-anchor':'bottom',
-            'icon-allow-overlap':true
-            }
+            'icon-anchor': 'bottom',
+            'icon-allow-overlap': true
+          }
         });
       })
-        
+
       map.loadImage(question_png, function (error, image) {
         if (error) throw error;
         map.addImage('question_pin', image);
@@ -348,14 +351,32 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
           id: 'unclustered-point-0',
           type: 'symbol',
           source: 'submissions',
-  
+
           filter: ['==', 'state', 0],
           layout: {
             'icon-image': 'question_pin',
             'icon-size': 0.3,
-            'icon-anchor':'bottom',
-            'icon-allow-overlap':true
-            }
+            'icon-anchor': 'bottom',
+            'icon-allow-overlap': true
+          }
+        });
+      })
+
+      map.loadImage(tick_png, function (error, image) {
+        if (error) throw error;
+        map.addImage('tick_png', image);
+        map.addLayer({
+          id: 'unclustered-point-2',
+          type: 'symbol',
+          source: 'submissions',
+
+          filter: ['==', 'state', 2],
+          layout: {
+            'icon-image': 'tick_png',
+            'icon-size': 0.3,
+            'icon-anchor': 'bottom',
+            'icon-allow-overlap': true
+          }
         });
       })
 
@@ -389,20 +410,20 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
       //   }
       // });
 
-      map.addLayer({
-        id: 'unclustered-point-2',
-        type: 'circle',
-        source: 'submissions',
+      // map.addLayer({
+      //   id: 'unclustered-point-2',
+      //   type: 'circle',
+      //   source: 'submissions',
 
-        filter: ['==', 'state', 2],
-        paint: {
-          // 'circle-color': '#11b4da',
-          'circle-color': '#1fbf27',
-          'circle-radius': 8,
-          'circle-stroke-width': 1,
-          'circle-stroke-color': '#fff'
-        }
-      });
+      //   filter: ['==', 'state', 2],
+      //   paint: {
+      //     // 'circle-color': '#11b4da',
+      //     'circle-color': '#1fbf27',
+      //     'circle-radius': 8,
+      //     'circle-stroke-width': 1,
+      //     'circle-stroke-color': '#fff'
+      //   }
+      // });
 
 
       //   map.on('click', 'clusters', (e) => {
@@ -451,31 +472,31 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
           );
         }
       });
-      
+
       map.on('click', 'unclustered-point-1', function (e) {
         var id = e.features[0].properties.id;
         props.setIdCallback(id);
         props.openImgPopUpCallback()
-          window.history.replaceState(null, "BetterStreets", id)
+        window.history.replaceState(null, "BetterStreets", id)
       });
 
       map.on('click', 'unclustered-point-0', function (e) {
         var id = e.features[0].properties.id;
         props.setIdCallback(id);
         props.openImgPopUpCallback()
-          window.history.replaceState(null, "BetterStreets", id)
+        window.history.replaceState(null, "BetterStreets", id)
       });
 
       map.on('click', 'unclustered-point-2', function (e) {
         var id = e.features[0].properties.id;
         props.setIdCallback(id);
         props.openImgPopUpCallback()
-          window.history.replaceState(null, "BetterStreets", id)
+        window.history.replaceState(null, "BetterStreets", id)
       });
 
 
-      
-      
+
+
 
       SetMap(map);
 
@@ -515,18 +536,18 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
 
 
   function addModal(id: string) {
-    if(popup!=null){
+    if (popup != null) {
       popup.remove()
     }
     var result = props.data.find(obj => {
-      return obj.id=== id
+      return obj.id === id
     })
-    console.log(result,map)
-    if(result==undefined || map == undefined){
+    console.log(result, map)
+    if (result == undefined || map == undefined) {
       return;
     }
     console.log("addModal2")
-    var coordinates = [result.lon,result.lat];
+    var coordinates = [result.lon, result.lat];
 
     var time = result.time;
     // var id = e.features[0].properties.id;
@@ -550,22 +571,22 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
     //      ).addTo(map);
     //   // pop.remove
 
-      // pop.on('close',()=>{
-      //   console.log(window.location.pathname)
-      // })
+    // pop.on('close',()=>{
+    //   console.log(window.location.pathname)
+    // })
 
-      // document.getElementById("popUpImg").onclick=props.openImgPopUpCallback
+    // document.getElementById("popUpImg").onclick=props.openImgPopUpCallback
 
-      // SetPopup(pop);
+    // SetPopup(pop);
   }
 
   return <div className="map-container-main" ref={mapContainer}>
-    <button className="menu-button" onClick={()=>{setSettingsOpen(true)}}><GiHamburgerMenu></GiHamburgerMenu></button>
-    <SideBarSettings 
-    settings={settings} 
-    updateCallback={(val)=>{setSettings(val)}}
-    closeCallback={()=>{setSettingsOpen(false)}} 
-    open={settingsOpen}></SideBarSettings>
+    <button className="menu-button" onClick={() => { setSettingsOpen(true) }}><GiHamburgerMenu></GiHamburgerMenu></button>
+    <SideBarSettings
+      settings={settings}
+      updateCallback={(val) => { setSettings(val) }}
+      closeCallback={() => { setSettingsOpen(false) }}
+      open={settingsOpen}></SideBarSettings>
   </div>;
 };
 

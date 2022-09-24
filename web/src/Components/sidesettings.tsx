@@ -20,10 +20,22 @@ function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any,
     //   }, [props.settings]);
 
 
-    
+
     const updateCompleted =(()=>{
         const clonedSettings = { ...props.settings };
         clonedSettings.completed = !clonedSettings.completed;
+        props.updateCallback(clonedSettings)
+    })  
+
+    const updateIncomplete =(()=>{
+        const clonedSettings = { ...props.settings };
+        clonedSettings.incomplete = !clonedSettings.incomplete;
+        props.updateCallback(clonedSettings)
+    })  
+
+    const updateUnclassified =(()=>{
+        const clonedSettings = { ...props.settings };
+        clonedSettings.unclassified = !clonedSettings.unclassified;
         props.updateCallback(clonedSettings)
     })  
 
@@ -36,7 +48,7 @@ function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any,
                      props.updateCallback(clonedSettings)
                     }
                     }/>
-                <label className={styles.sidebar_label}>Completed</label>
+                <label className={styles.sidebar_label} onClick={()=>{updateCompleted()}}>Completed</label>
         </div>
         <div className={styles.sidebar_check} >    
                 <input type="checkbox" id="scales" name="scales" checked={props.settings.incomplete} onChange={()=>{
@@ -44,7 +56,7 @@ function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any,
                      clonedSettings.incomplete = !clonedSettings.incomplete;
                      props.updateCallback(clonedSettings)
                     }}/>
-                <label className={styles.sidebar_label}>Incomplete</label>
+                <label className={styles.sidebar_label} onClick={()=>{updateIncomplete()}}>Incomplete</label>
         </div>
         <div className={styles.sidebar_check} >    
                 <input type="checkbox" id="scales" name="scales" checked={props.settings.unclassified}onChange={()=>{
@@ -52,7 +64,7 @@ function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any,
                      clonedSettings.unclassified = !clonedSettings.unclassified;
                      props.updateCallback(clonedSettings)
                     }}/>
-                <label className={styles.sidebar_label} >Unclassified</label>
+                <label className={styles.sidebar_label} onClick={()=>{updateUnclassified()}} >Unclassified</label>
         </div>
 
         <button onClick={()=>{props.closeCallback()}} className={styles.close}><GiHamburgerMenu></GiHamburgerMenu></button>

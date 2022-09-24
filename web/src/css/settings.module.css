@@ -23,11 +23,15 @@ transition: left .225s cubic-bezier(0, 0, 0.2, 1);
 
 .sidebar_check{
     padding-top: 10px;
-    font-size:15px;
+    font-size:18px;
+    
+    
 }
 
 .sidebar_label{
     padding-left:10px;
+    user-select: none;
+    cursor: pointer;
 }
 
 .close{

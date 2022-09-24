@@ -184,6 +184,7 @@ function PopUp(props: { open:boolean,id: string, data: any, closeCallback: any, 
                      <div className={styles.close} onClick={()=>{props.closeCallback()}}>x</div>
                     <div>Is this a crossing with traffic signals?</div>
                     <div className="modal_footer">
+                    <div className="modal_button cancel" onClick={() => props.closeCallback()}>Don't Know</div>
                     <div className="modal_button cancel" onClick={() => submit_type(false)}>No</div>
                     <div className="modal_button save" onClick={() => submit_type(true)}>Yes</div>
                     </div>
@@ -257,8 +258,10 @@ function PopUp(props: { open:boolean,id: string, data: any, closeCallback: any, 
 
                 }
                 </div>
-                <div className={ styles.submit+" modal_button save "} onClick={() => submit()}>Submit</div>
-
+                <div className = {styles.timer_button_holder}>
+                    <div className={styles.submit+" modal_button cancel"} onClick={() => props.closeCallback()}>Cancel</div>
+                    <div className={ styles.submit+" modal_button save "} onClick={() => submit()}>Submit</div>
+                </div>
 
             </div>
        

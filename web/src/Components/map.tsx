@@ -8,6 +8,8 @@ import { LayoutRouteProps } from 'react-router-dom';
 import { renderToString } from 'react-dom/server'
 import harborne from '../JSON/harborne.json';
 import quinton from '../JSON/quinton.json';
+import svg from '../resources/green_pin_shadow.png';
+import question_png from '../resources/question_pin_shadow.png';
 // import MapLayerEventType from
 const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any }) => {
 
@@ -158,8 +160,8 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
         'type': 'geojson',
         data: data2geojson(),
         cluster: true,
-        clusterMaxZoom: 14, // Max zoom to cluster points on
-        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+        clusterMaxZoom: 13, // Max zoom to cluster points on
+        clusterRadius: 40 // Radius of each cluster when clustering points (defaults to 50)
 
       });
 
@@ -287,35 +289,71 @@ const MapMain = (props: { data: any, id: string | undefined , openImgPopUpCallba
 
       });
 
-      map.addLayer({
-        id: 'unclustered-point-0',
-        type: 'circle',
-        source: 'submissions',
+      map.loadImage(svg, function (error, image) {
+        if (error) throw error;
+        map.addImage('green_pin', image);
+        map.addLayer({
+          id: 'unclustered-point-1',
+          type: 'symbol',
+          source: 'submissions',
+  
+          filter: ['==', 'state', 1],
+          layout: {
+            'icon-image': 'green_pin',
+            'icon-size': 0.3,
+            'icon-anchor':'bottom',
+            'icon-allow-overlap':true
+            }
+        });
+      })
+        
+      map.loadImage(question_png, function (error, image) {
+        if (error) throw error;
+        map.addImage('question_pin', image);
+        map.addLayer({
+          id: 'unclustered-point-0',
+          type: 'symbol',
+          source: 'submissions',
+  
+          filter: ['==', 'state', 0],
+          layout: {
+            'icon-image': 'question_pin',
+            'icon-size': 0.3,
+            'icon-anchor':'bottom',
+            'icon-allow-overlap':true
+            }
+        });
+      })
 
-        filter: ['==', 'state', 0],
-        paint: {
-          // 'circle-color': '#11b4da',
-          'circle-color': '#ff0505',
-          'circle-radius': 8,
-          'circle-stroke-width': 1,
-          'circle-stroke-color': '#fff'
-        }
-      });
+      // map.addLayer({
+      //   id: 'unclustered-point-0',
+      //   type: 'circle',
+      //   source: 'submissions',
 
-      map.addLayer({
-        id: 'unclustered-point-1',
-        type: 'circle',
-        source: 'submissions',
+      //   filter: ['==', 'state', 0],
+      //   paint: {
+      //     // 'circle-color': '#11b4da',
+      //     'circle-color': '#ff0505',
+      //     'circle-radius': 8,
+      //     'circle-stroke-width': 1,
+      //     'circle-stroke-color': '#fff'
+      //   }
+      // });
 
-        filter: ['==', 'state', 1],
-        paint: {
-          // 'circle-color': '#11b4da',
-          'circle-color': '#ff7b00',
-          'circle-radius': 8,
-          'circle-stroke-width': 1,
-          'circle-stroke-color': '#fff'
-        }
-      });
+      // map.addLayer({
+      //   id: 'unclustered-point-1',
+      //   type: 'circle',
+      //   source: 'submissions',
+
+      //   filter: ['==', 'state', 1],
+      //   paint: {
+      //     // 'circle-color': '#11b4da',
+      //     'circle-color': '#ff7b00',
+      //     'circle-radius': 8,
+      //     'circle-stroke-width': 1,
+      //     'circle-stroke-color': '#fff'
+      //   }
+      // });
 
       map.addLayer({
         id: 'unclustered-point-2',

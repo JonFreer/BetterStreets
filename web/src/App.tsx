@@ -17,7 +17,9 @@ function App() {
     <div className="App">
       
       <BrowserRouter>
+      
       <NavBar></NavBar>
+
       <Routes>
         {/* <Route path="/" element={<Form />}> */}
           <Route index element={<Main />} />

@@ -13,11 +13,11 @@ import question_png from '../resources/question_pin_shadow.png';
 import tick_png from '../resources/tick_pin_shadow.png'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import SideBarSettings from './sidesettings';
+import { BiMessageAltAdd } from 'react-icons/bi';
+import popup_styles from '../css/popup.module.css';
 
 // import MapLayerEventType from
 const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any }) => {
-
-
 
   const mapContainer = useRef<any>(null);
   const [map, SetMap] = useState<any>(null);
@@ -83,7 +83,32 @@ const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any 
   return <div className="map-container-submit" ref={mapContainer}></div>;
 };
 
-const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallback: any, setIdCallback: any }) => {
+const AddCrossingPopup = (props: { open: boolean, closeCallback: any, acceptCallback: any }) => {
+  if (props.open) {
+    setTimeout(() => document.getElementById('modal_marker')?.classList.add(popup_styles.open), 1)
+    return (
+      <div id="modal_marker" className={popup_styles.outer}>
+        <div className={popup_styles.holder}>
+          <div className={popup_styles.close} onClick={() => { props.closeCallback() }}>x</div>
+          <div>Add a crossing here?</div>
+          <div className="modal_footer">
+            {/* <div className="modal_button cancel" onClick={() => props.closeCallback()}></div> */}
+            <div className="modal_button cancel" onClick={() => props.closeCallback()}>Cancel</div>
+            <div className="modal_button save" onClick={() => props.acceptCallback()}>Add</div>
+          </div>
+        </div>
+      </div>)
+  } else {
+    // else{
+    document.getElementById('modal_marker')?.classList.remove(popup_styles.open);
+    return (<></>)
+  }
+}
+
+
+
+
+const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallback: any, setIdCallback: any,updateCallback: any }) => {
 
 
 
@@ -95,7 +120,9 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
     "completed": true,
     "incomplete": true,
     "unclassified": true
-  })
+  });
+  const [marker, SetMarker] = useState<any>(null);
+  const [markerPopupOpen, setMarkerPopupOpen] = useState<boolean>(false);
   // const [markers, SetMarkers] = useState<any>([]);
   // const [startLat, setStartLat] = useState(props.markerLat)
   // 
@@ -153,6 +180,28 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
       "features": tempData
     });
   }
+  const addMarker = (() => {
+    // props 
+    // marker
+    // marker 
+    setMarkerPopupOpen(true);
+    const { lng, lat } = map.getCenter();
+    if (marker == null) {
+      var marker_ = new maplibregl.Marker({
+        color: "#FF3333",
+        draggable: true
+      }).setLngLat([lng, lat])
+        .addTo(map);
+
+      marker_.on('drag', function (e) {
+        // props.callback(marker.getLngLat().lat, marker.getLngLat().lng)
+      })
+
+      SetMarker(marker_);
+    }
+  })
+
+
 
   useEffect(() => {
     if (props.id != undefined) {
@@ -378,7 +427,16 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
             'icon-allow-overlap': true
           }
         });
-      })
+      });
+
+      // var _marker = new maplibregl.Marker({
+      //   color: "#FF3333",
+      //   draggable: true
+      // }).setLngLat([0, 0]).addTo(map);
+
+      // SetMarker(marker);
+
+      // marker.visible = false; 
 
       // map.addLayer({
       //   id: 'unclustered-point-0',
@@ -550,38 +608,56 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
     var coordinates = [result.lon, result.lat];
 
     var time = result.time;
-    // var id = e.features[0].properties.id;
-
-    // Ensure that if the map is zoomed out such that
-    // multiple copies of the feature are visible, the
-    // popup appears over the copy being pointed to.
-    // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-    //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    // }
 
     map.flyTo({
       center: [coordinates[0], coordinates[1]],
       zoom: 17
     });
-    // var img = <img onClick={()=>{console.log("zoom");props.openImgPopUpCallback()}} className={"popup_img"} src={"/api/img_thumb/" + id + ".WebP"}/> 
-    // const pop =new maplibregl.Popup();
-    //   pop.setLngLat([coordinates[0], coordinates[1]])
-    //   .setHTML(
-    //     '<img id="popUpImg" class="popup_img" src="/api/img_thumb/' + id + '.WebP" > </img>'
-    //      ).addTo(map);
-    //   // pop.remove
 
-    // pop.on('close',()=>{
-    //   console.log(window.location.pathname)
-    // })
-
-    // document.getElementById("popUpImg").onclick=props.openImgPopUpCallback
-
-    // SetPopup(pop);
   }
 
+ function addCrossing(){
+  // console.log("Update type", signals);
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ lat:marker.getLngLat().lat, lng: marker.getLngLat().lng })
+        };
+
+
+        fetch('/api/new_crossing', requestOptions)
+            .then(response => {
+                console.log(response)
+                if (response.status == 200) {
+                    response.json().then((data) => {
+                        console.log("success")
+                        marker.remove();
+                        SetMarker(null);
+                        props.updateCallback();
+                        setMarkerPopupOpen(false);
+                        props.setIdCallback(data.id)
+                    });
+                } else {
+                    console.log("Failed Upload")
+                }
+            })
+ }
+
   return <div className="map-container-main" ref={mapContainer}>
+    <AddCrossingPopup open={markerPopupOpen} closeCallback={() => { 
+      setMarkerPopupOpen(false) 
+      marker.remove();
+      SetMarker(null);
+      // map.
+
+    }} acceptCallback={() => { addCrossing()
+    }
+  }
+        
+    ></AddCrossingPopup>
     <button className="menu-button" onClick={() => { setSettingsOpen(true) }}><GiHamburgerMenu></GiHamburgerMenu></button>
+    <button className="menu-button add" onClick={() => { addMarker() }}><BiMessageAltAdd></BiMessageAltAdd></button>
     <SideBarSettings
       settings={settings}
       updateCallback={(val) => { setSettings(val) }}
@@ -589,5 +665,7 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
       open={settingsOpen}></SideBarSettings>
   </div>;
 };
+
+
 
 export { MapSubmit, MapMain };    

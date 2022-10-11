@@ -26,7 +26,6 @@ function Main() {
                 console.log(response)
                 if(response.status==200){
                     response.json().then((data) => {
-                        console.log(data)
                         // Set the current state of the crossings
                         // 0: Undefined crossing
                         // 1: Traffic singals with no data
@@ -41,9 +40,6 @@ function Main() {
                                      if(data[i].waiting_times.split(",")[data[i].waiting_times.split(",").length-1]==0){
                                         data[i].state = 1;
                                      }
-                                
-
-                                    
                                 }else{
                                     data[i].state = 1;
                                 }
@@ -73,7 +69,7 @@ function Main() {
             <PopUp open={popupOpen} id={id} data={data.find(obj => {return obj.id== id})} closeCallback={()=>{setPopUpOpen(false); getData()}}  
             updateCallback={()=>{getData()}}  ></PopUp>
             <MapMain data={data} id={id} openImgPopUpCallback={()=>{console.log("hi");setPopUpOpen(true)}}
-            setIdCallback={(id)=>{setId(id)}}
+            setIdCallback={(id)=>{setId(id)}}  updateCallback={()=>{getData()}} 
             ></MapMain>
        </>)
     

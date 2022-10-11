@@ -82,7 +82,7 @@ def read_submissions(
 
 
 class TimeUpdate(BaseModel):
-    id: int 
+    id: uuid.UUID 
     waiting_time: int 
     crossing_time: int
     notes: str
@@ -103,8 +103,9 @@ def set_time(
 
 
 class TypeUpdate(BaseModel):
-    id: int 
+    id: uuid.UUID
     type: bool 
+    pass
 
 @router.post("/set_type/", response_model=schemas.Crossing, tags=["crossings"])
 def set_type(
@@ -112,12 +113,21 @@ def set_type(
     typeUpdate: TypeUpdate,
     db: Session = Depends(get_db),
 ):
-    # validate.check_limit(limit)
-    # print("UPP")
     response.headers["X-Total-Count"] = str(5)
-    # res = crud.get_submissions(db, (limit, offset))
-    # print(res[0].time)
     return crud.set_type(db, typeUpdate.id, typeUpdate.type)
+
+
+class NewCrossingParams(BaseModel):
+    lat: float 
+    lng: float 
+@router.post("/new_crossing/",response_model=schemas.Crossing,tags=["crossing"])
+def new_crossing(
+    response:Response,
+    crossingParams: NewCrossingParams,
+     db: Session = Depends(get_db),
+):
+    response.headers["X-Total-Count"] = str(5)
+    return crud.create_crossing(db, None,crossingParams.lat,crossingParams.lng,"traffic_signals")
 
 @router.get("/load_geojson/", response_model=None, tags=["crossings"])
 def load_geojson(

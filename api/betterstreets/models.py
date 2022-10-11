@@ -21,11 +21,12 @@ class Submission(Base):
 
 class Crossing(Base):
     __tablename__ = "crossings"
-
-    id= Column( 
-        BigInteger, primary_key=True, index=True, nullable=False
+    id: uuid.UUID = Column(
+        UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4
+    )
+    osm_id= Column( 
+        BigInteger, nullable=True
     ) #find the correct type
-
     waiting_times =  Column(String,nullable=True)
     crossing_times = Column(String,nullable=True)
     notes = Column(String,nullable=True)
@@ -35,6 +36,7 @@ class Crossing(Base):
     updated_type = Column(String,nullable=True)
     notes = Column(String,nullable=True)
     visible = Column(Boolean,default=True)
+
 
 # class User(Base):
 #     __tablename__ = "users"

@@ -33,7 +33,8 @@ class Submission(BaseModel):
     tag_double_yellow:bool
 
 class Crossing(BaseModel):
-    id:int
+    id:uuid.UUID
+    osm_id:Optional[int]
     lat:float
     lon:float
     waiting_times:Optional[str]

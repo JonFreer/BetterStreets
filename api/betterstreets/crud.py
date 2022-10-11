@@ -43,11 +43,11 @@ def create_submission(db: Session, time:datetime, lat:float,lon:float,tags:Dict[
         return None
     
 
-def create_crossing(db:Session, id:int, lat:float,lon:float,type_:str)->models.Crossing:
+def create_crossing(db:Session, osm_id:int, lat:float,lon:float,type_:str)->models.Crossing:
     print("Creating Crossing")
 
     db_submission = models.Crossing( 
-        id=id,
+        osm_id=osm_id,
         lat=lat,
         lon=lon,
         type=type_)
@@ -56,8 +56,9 @@ def create_crossing(db:Session, id:int, lat:float,lon:float,type_:str)->models.C
     db.commit()
     # _sync_pending_achievements(db, db_submission)
     db.refresh(db_submission)
+    return db_submission
 
-def set_time_and_notes(db:Session, id: int, waiting_time:int,cossing_time :int,notes:str)->models.Crossing:
+def set_time_and_notes(db:Session, id: uuid, waiting_time:int,cossing_time :int,notes:str)->models.Crossing:
     db_submission = db.query(models.Crossing).filter_by(id=id).first()
     print("got submission")
     if(db_submission.waiting_times == None):
@@ -83,7 +84,7 @@ def set_time_and_notes(db:Session, id: int, waiting_time:int,cossing_time :int,n
     print("updated time3")
     return db_submission
 
-def set_type(db:Session, id: int, type:bool):
+def set_type(db:Session, id: uuid, type:bool):
     db_submission = db.query(models.Crossing).filter_by(id=id).first()
     if(type):   
         db_submission.updated_type = "traffic_signals"
@@ -94,7 +95,7 @@ def set_type(db:Session, id: int, type:bool):
     db.refresh(db_submission)
     return db_submission
 
-def set_visibility(db: Session, id: int, visibility:bool):
+def set_visibility(db: Session, id: uuid, visibility:bool):
     db_submission = db.query(models.Submission).filter_by(id=id).first()
     db_submission.visible = visibility
     db.commit()

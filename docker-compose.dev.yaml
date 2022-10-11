@@ -60,13 +60,13 @@ services:
     volumes:
       - "./api:/app"
 
-  admin:
-    build:
-      context: ./admin
-      target: dev
-    volumes:
-      - "./admin/src:/app/src"
-      - "./admin/public:/app/public"
+  # admin:
+  #   build:
+  #     context: ./admin
+  #     target: dev
+  #   volumes:
+  #     - "./admin/src:/app/src"
+  #     - "./admin/public:/app/public"
 
 networks:
   traefik_web:

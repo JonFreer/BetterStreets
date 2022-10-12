@@ -161,7 +161,7 @@ def load_geojson_in_json(
     out body;
     """)
     import os
-    dirname = os.path.dirname(__file__)
+    dirname =  os.path.dirname(os.path.dirname(__file__))
     with open(os.path.join(dirname, '../JSON/harborne.JSON')) as f:
         h_json = json.load(f)
     with open(os.path.join(dirname, '../JSON/quinton.JSON')) as f:

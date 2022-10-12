@@ -160,10 +160,11 @@ def load_geojson_in_json(
     (._;>;);
     out body;
     """)
-
-    with open('betterstreets/JSON/harborne.JSON') as f:
+    import os
+    dirname = os.path.dirname(__file__)
+    with open(os.path.join(dirname, '../JSON/harborne.JSON')) as f:
         h_json = json.load(f)
-    with open('betterstreets/JSON/quinton.JSON') as f:
+    with open(os.path.join(dirname, '../JSON/quinton.JSON')) as f:
         q_json = json.load(f)
 
     h_shape = shape(h_json)

@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 import json
 from .. import crud, models, schemas, validate
 from ..dependencies import get_db
-
+from shapely.geometry import shape, Point
 import io
 import os
 import time as t
@@ -120,7 +120,7 @@ def set_type(
 class NewCrossingParams(BaseModel):
     lat: float 
     lng: float 
-@router.post("/new_crossing/",response_model=schemas.Crossing,tags=["crossing"])
+@router.post("/new_crossing/",response_model=schemas.Crossing,tags=["crossings"])
 def new_crossing(
     response:Response,
     crossingParams: NewCrossingParams,
@@ -129,7 +129,7 @@ def new_crossing(
     response.headers["X-Total-Count"] = str(5)
     return crud.create_crossing(db, None,crossingParams.lat,crossingParams.lng,"traffic_signals")
 
-@router.get("/load_geojson/", response_model=None, tags=["crossings"])
+@router.get("/load_geojson/", response_model=None, tags=["set up"])
 def load_geojson(
     response: Response,
     db: Session = Depends(get_db),
@@ -147,6 +147,43 @@ def load_geojson(
             type = node.tags["crossing"]
 
         crossing = crud.create_crossing(db, node.id, node.lat,node.lon,type)
+
+@router.get("/load_geojson_in_json/", response_model=None, tags=["set up"])
+def load_geojson_in_json(
+    response: Response,
+    db: Session = Depends(get_db),
+):
+    api = overpy.Overpass()
+    print("Loading GeoJson")
+    result = api.query("""
+    node(52.416807660144705, -2.0267880276083505,52.54420452241926, -1.7436518538274453) [highway=crossing];
+    (._;>;);
+    out body;
+    """)
+
+    with open('betterstreets/JSON/harborne.JSON') as f:
+        h_json = json.load(f)
+    with open('betterstreets/JSON/quinton.JSON') as f:
+        q_json = json.load(f)
+
+    h_shape = shape(h_json)
+    q_shape = shape(q_json)
+    # print(h_shape)
+    for node in result.nodes:
+        type = ""
+        if "crossing" in node.tags:
+            type = node.tags["crossing"]
+            
+        point = Point(node.lon,node.lat)
+        if h_shape.contains(point) or q_shape.contains(point):
+            crossing = crud.create_crossing(db, node.id, node.lat,node.lon,type)
+        # if :
+
+        # else:
+            # print("out")
+
+    #     crossing = crud.create_crossing(db, node.id, node.lat,node.lon,type)
+
 
         # print("    Lat: %f, Lon: %f" % (node.lat, node.lon))
         # if "crossing" in node.tags:

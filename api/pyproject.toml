@@ -17,6 +17,7 @@ aiofiles= "^0.8.0"
 uvicorn = "^0.17.6"
 pydantic = "^1.9.1"
 overpy ="^0.6"
+Shapely = "^1.8.4"
 
 [tool.poetry.dev-dependencies]
 build = "^0.7.0"

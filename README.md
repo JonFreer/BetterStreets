@@ -32,3 +32,7 @@ this resolves to `127.0.0.1`!
 
 The api can be found at betterstreets.localhost/api/docs
 
+## Admin
+
+This is a WIP admin dashboard. Currently it is featureless
+

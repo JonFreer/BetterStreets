@@ -24,8 +24,8 @@ transition: left .225s cubic-bezier(0, 0, 0.2, 1);
 .sidebar_check{
     padding-top: 10px;
     font-size:18px;
-    
-    
+
+
 }
 
 .sidebar_label{
@@ -38,7 +38,7 @@ transition: left .225s cubic-bezier(0, 0, 0.2, 1);
     background: white;
     z-index: 5;
     position: absolute;
-    top: 5px;
+    top: 11px;
     right: 10px;
     width: 40px;
     height: 40px;
@@ -47,7 +47,7 @@ transition: left .225s cubic-bezier(0, 0, 0.2, 1);
     user-select: none;
     cursor: pointer;
     border: none;
-
+    scale: 1.5;
   }
 
   .close:hover{

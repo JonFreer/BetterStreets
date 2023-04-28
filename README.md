@@ -7,7 +7,7 @@
 - Generate certificates using [mkcert](https://github.com/FiloSottile/mkcert):
 
       cd traefik/certs
-      mkcert -cert-file dev.cert -key-file dev.pem "betterstreets.localhost" "*.achieve.localhost"
+      mkcert -cert-file dev.cert -key-file dev.pem "betterstreets.localhost" "*.betterstreets.localhost"
       
 - Create a `.env` file using the `example.env` template:
 

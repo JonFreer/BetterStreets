@@ -71,4 +71,4 @@ services:
 networks:
   traefik_web:
     external:
-            true
+            false

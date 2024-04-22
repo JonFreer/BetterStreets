@@ -18,28 +18,46 @@
 }
 
 .holder{
+    color: #515151;
+    text-align: left;
     max-width: 500px;
     /* position: absolute; */
     /* height:50px; */
     background: white;
     width:80%;
-    bottom:10px;
+    bottom:0px;
     z-index: 10;
     border-radius: 10px;
     margin:auto;
-    padding:20px;
+    position: relative;
+    padding:1px 20px 20px 20px;
     box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24);
 }
 
 
 
 .time{
-    margin-right:auto;
+    background: #f9f9f9;
+    margin: 5px 25px 10px 25px;
+    border-radius: 5px;
+
+    position: relative;
+    font-size: 30px;
+    font-weight: 700;
+    display: grid;
+    padding: 10px;
 }
+
+.time_holder{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* grd */
+}
+
 
 .submit{
     margin-left:0px !important;
-    margin-top:20px;
+    /* margin-top:20px; */
 }
 
 .close{
@@ -117,9 +135,34 @@
 .timer_button_holder{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    margin-top: 10px;
+    margin: 0px 25px;
+    gap: 25px;
+    /* margin-top: 10px; */
 }
 
 .no_margin{
     margin-left: 0px !important;
+}
+
+.survey_button{
+    background:#ff5400;
+    color:white;
+    width:100%;
+    border: none;
+    border-radius: 5px;
+    padding:10px;
+    font-weight: 700;
+    font-size: 20px;
+    margin:15px 25px 0px 25px;
+    width: calc(100% - 50px);
+    position: relative;
+}
+
+
+.icon{
+    position: absolute;
+    top:13px;
+    margin-left:10px;
+    right: 10px;
+    /* left: 5px; */
 }

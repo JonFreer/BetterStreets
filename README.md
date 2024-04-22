@@ -13,9 +13,6 @@
 
       cp example.env .env
 
-  You *will* need to fill in any missing fields, such as the OAuth scope stuff
-  for both Twitter and Discord.
-
 - Download and build docker image dependencies:
 
       INFRA=dev make pull
@@ -32,7 +29,5 @@ this resolves to `127.0.0.1`!
 
 The api can be found at betterstreets.localhost/api/docs
 
-## Admin
 
-This is a WIP admin dashboard. Currently it is featureless
 

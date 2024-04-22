@@ -2,11 +2,10 @@ import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
 import { ModalDateTime, ModalMetaData } from './modal';
 import exifr from 'exifr'
 import './form.css'
-import { MapSubmit } from './map';
+// import { MapSubmit } from './map';
 import { Tags } from './tags'
 import { FaSpinner } from 'react-icons/fa';
 import { useNavigate, useParams } from "react-router-dom";
-import ImageDraw from './imgDraw';
 // import { useHistory } from "react-router-dom";
 // import {withRouter} from 'react-router';
 //AiOutlineEdit
@@ -145,11 +144,11 @@ function Submit() {
             <div className='form_text'>Click and Drag to Censor the Image</div>
             
             <br></br>
-            <ImageDraw open={imageDrawActive} img={image} callback={(blob: any) => {
+            {/* <ImageDraw open={imageDrawActive} img={image} callback={(blob: any) => {
                 setImage(URL.createObjectURL(blob));
                 setImgFileNew(new File([blob], "IMG_20220518_203117.jpg", { type: "image/jpeg", lastModified: new Date().getTime() }));
                 setImageDrawActive(false);
-            }}></ImageDraw>
+            }}></ImageDraw> */}
 
         </div>)
     }
@@ -193,7 +192,7 @@ function Submit() {
                             <AiOutlineEdit className='icon_form'></AiOutlineEdit>
                         </div>
                         <div className='tag_header'>Location</div>
-                        <MapSubmit markerLat={initLat}
+                        {/* <MapSubmit markerLat={initLat}
                             markerLon={initLon}
                             callback={(lat: number, lon: number) => {
                                 // this.setState({ lat: lat, lon: lon })
@@ -201,7 +200,7 @@ function Submit() {
                                 setLon(lon);
                             }}
 
-                        ></MapSubmit>
+                        ></MapSubmit> */}
 
                         <Tags tags={tags} callback={(val: any) => {
                             tags[val] = !tags[val]

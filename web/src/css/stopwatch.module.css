@@ -1,0 +1,225 @@
+
+
+.stopwatch {
+    position: relative;
+    background: white;
+    justify-self: center;
+    align-self: center;
+    box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24);
+    border-radius: 20px;
+    min-width: min(280px,95%);;
+    padding: 0px 0px;
+    text-align: left;
+    transition: transform .225s cubic-bezier(0, 0, 0.2, 1);
+    transform: scale(0);
+    width:350px;
+
+    color:#515151;
+    overflow: hidden;
+    /* height:100px; */
+}
+
+.stopwatch.open {
+    transform: scale(1);
+}
+
+.heading{
+    font-size: 20px;
+    font-weight: 700;
+    margin: 25px 25px 15px 25px;
+}
+
+.sub_heading{
+    margin: 0px 25px 00px 25px;
+    font-size:15px;
+}
+
+.time{
+    all: unset;
+    /* font-weight: 700; */
+    /* font-size: 30px; */
+    /* padding: 10px 10px; */
+    width: calc(100% - 20px);
+    /* width: 100%; */
+    padding: 10px 10px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 100;
+    color:rgba(255, 0, 0, 0);
+    caret-color: #515151;
+
+
+}
+
+.time_holder{
+        background: #f9f9f9;
+        margin: 5px 25px 10px 25px;
+        border-radius: 5px;
+
+        position: relative;
+        font-size: 30px;
+        font-weight: 700;
+        display: grid;
+
+}
+
+.time_holder::after {
+    /* Note the weird space! Needed to preventy jumpy behavior */
+    content: attr(data-replicated-value) "s";
+  
+    /* This is how textarea text behaves */
+    white-space: pre-wrap;
+  
+    font: inherit;
+    position:relative;
+    padding: 10px 10px;
+
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
+
+
+
+
+.note{
+    all: unset;
+    background: #ebe9e9;
+    border-radius: 5px;
+    margin: 25px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px 10px;
+    width: calc(100% - 70px);
+    /* min-width: 100%;
+    max-width: 100%; */
+    /* field-sizing: normal; */
+}
+
+.grow_wrap{
+        /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+        display: grid;
+        /* all: unset; */
+        background: #ebe9e9;
+        border-radius: 5px;
+        margin: 25px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        max-height: 110px;
+        overflow-y: scroll;
+        /* padding: 10px 10px; */
+}
+
+.text_area{
+    /* all: unset; */
+    border:none;
+    background:none;
+    outline: none;
+}
+
+.grow_wrap::after {
+    /* Note the weird space! Needed to preventy jumpy behavior */
+    content: attr(data-replicated-value) " ";
+  
+    /* This is how textarea text behaves */
+    white-space: pre-wrap;
+  
+    /* Hidden from view, clicks, and screen readers */
+    visibility: hidden;
+  }
+  .grow_wrap > textarea {
+    /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+    resize: none;
+  
+    /* Firefox shows scrollbar on growth, you can hide like this. */
+    overflow: hidden;
+  }
+  .grow_wrap > textarea,
+  .grow_wrap::after {
+    /* Identical styling required!! */
+    /* border: 1px solid black; */
+    padding: 0.5rem;
+    font: inherit;
+  
+    /* Place on top of each other */
+    grid-area: 1 / 1 / 2 / 2;
+  }
+  
+
+.button{
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    width: 100%;
+    color:white;
+    background: rgb(4, 148, 13);
+    text-align: center;
+    font-weight: 700;
+    font-size: 25px;
+    padding: 35px 0px;
+    margin-top:20px;
+}
+
+.exit{
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    position: absolute;
+    right: 10px;
+    top:20px;
+    /* font-weight: 700; */
+    font-size: 30px;
+    /* background: #ebe9e9; */
+    /* box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24); */
+    border-radius: 20px;
+    height: 40px;
+    width: 40px;
+    line-height: 20px;
+    /* padding-top: -5px; */
+    /* margin-top: -10px; */
+    
+}
+
+.button_holder{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 20px;
+    gap:20px;
+}
+
+.reset{
+    /* all:unset; */
+    border-radius: 4px;
+    font-size: .875rem;
+    font-weight: 500;
+    height: 36px;
+    line-height: 36px;
+    /* padding: 0 8px 0 8px;
+    min-width: 54px; */
+    /* -webkit-user-select: none; */
+    /* user-select: none; */
+
+    border:none;
+    color:#515151;
+    /* margin-right:10px; */
+}
+
+.submit{
+    border-radius: 4px;
+    font-size: .875rem;
+    border:none;
+    background: rgb(0, 110, 255);
+    color:white;
+}
+
+.submit:hover{
+    background: rgb(2, 95, 217);
+}

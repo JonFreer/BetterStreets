@@ -8,6 +8,7 @@ import { LayoutRouteProps } from 'react-router-dom';
 import { renderToString } from 'react-dom/server'
 import harborne from '../JSON/harborne.json';
 import quinton from '../JSON/quinton.json';
+import wards_geojson from '../JSON/gejson';
 import svg from '../resources/green_pin_shadow.png';
 import question_png from '../resources/question_pin_shadow.png';
 import tick_png from '../resources/tick_pin_shadow.png'
@@ -15,73 +16,77 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 import SideBarSettings from './sidesettings';
 import { BiMessageAltAdd } from 'react-icons/bi';
 import popup_styles from '../css/popup.module.css';
+import stopwatchCSS from '../css/stopwatch.module.css';
+import wards_geo_json from '../JSON/birmingham_wards.geo.json';
+import { IoCloseSharp } from 'react-icons/io5';
 
 // import MapLayerEventType from
-const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any }) => {
+// const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any }) => {
 
-  const mapContainer = useRef<any>(null);
-  const [map, SetMap] = useState<any>(null);
-  const [marker, SetMarker] = useState<any>(null);
-  // const [startLat, setStartLat] = useState(props.markerLat)
-  // 
-  useEffect(() => {
-    // if (props.markerLat !== startLat) {
-    // setStartLat(props.markerLat);// if the props have been updated
-    if (marker) {
-      console.log(mapContainer.current)
-      marker.setLngLat([props.markerLon, props.markerLat])
-      map.setCenter([props.markerLon, props.markerLat])
-    }
+//   const mapContainer = useRef<any>(null);
+//   const [map, SetMap] = useState<any>(null);
+//   const [marker, SetMarker] = useState<any>(null);
+//   // const [startLat, setStartLat] = useState(props.markerLat)
+//   // 
+//   useEffect(() => {
+//     // if (props.markerLat !== startLat) {
+//     // setStartLat(props.markerLat);// if the props have been updated
+//     if (marker) {
+//       console.log(mapContainer.current)
+//       marker.setLngLat([props.markerLon, props.markerLat])
+//       map.setCenter([props.markerLon, props.markerLat])
+//     }
 
-    // mapContainer.current
-    // }
-  }, [props.markerLat]);
+//     // mapContainer.current
+//     // }
+//   }, [props.markerLat]);
 
-  useEffect(() => {
-    // This API key is for use only in stackblitz.com
-    // Get your Geoapify API key on https://www.geoapify.com/get-started-with-maps-api
-    // The Geoapify service is free for small projects and the development phase.
-    // const myAPIKey = '18c85a44a76042788847e2fb74d27386';
-    const mapStyle =
-      'https://api.maptiler.com/maps/openstreetmap/style.json?key=2pdGAnnIuClGHUCta2TU';
+//   useEffect(() => {
+//     // This API key is for use only in stackblitz.com
+//     // Get your Geoapify API key on https://www.geoapify.com/get-started-with-maps-api
+//     // The Geoapify service is free for small projects and the development phase.
+//     // const myAPIKey = '18c85a44a76042788847e2fb74d27386';
+//     const mapStyle =
+//       'https://api.maptiler.com/maps/openstreetmap/style.json?key=2pdGAnnIuClGHUCta2TU';
 
-    const initialState = {
-      lng: props.markerLon,
-      lat: props.markerLat,
-      zoom: 16,
-    };
+//     const initialState = {
+//       lng: props.markerLon,
+//       lat: props.markerLat,
+//       zoom: 16,
+//     };
 
-    console.log(props.markerLat, props.markerLon)
-    const map = new maplibregl.Map({
-      container: mapContainer.current,
-      style: `${mapStyle}`,
-      center: [props.markerLon, props.markerLat],
-      zoom: initialState.zoom,
-    });
+//     console.log(props.markerLat, props.markerLon)
+//     const map = new maplibregl.Map({
+//       container: mapContainer.current,
+//       style: `${mapStyle}`,
+//       center: [props.markerLon, props.markerLat],
+//       zoom: initialState.zoom,
+//     });
 
-    // map.set
+//     // map.set
 
-    SetMap(map);
+//     SetMap(map);
 
-    var marker = new maplibregl.Marker({
-      color: "#FF3333",
-      draggable: true
-    }).setLngLat([props.markerLon, props.markerLat])
-      .addTo(map);
+//     var marker = new maplibregl.Marker({
+//       // color: "#FF3333",
+//       draggable: true,
+//       scale: 5,
+//     }).setLngLat([props.markerLon, props.markerLat])
+//       .addTo(map);
 
-    marker.on('drag', function (e) {
-      props.callback(marker.getLngLat().lat, marker.getLngLat().lng)
-    })
+//     marker.on('drag', function (e) {
+//       props.callback(marker.getLngLat().lat, marker.getLngLat().lng)
+//     })
 
-    SetMarker(marker);
+//     SetMarker(marker);
 
 
 
-    // mapIsReadyCallback(map);
-  }, [mapContainer.current]);
+//     // mapIsReadyCallback(map);
+//   }, [mapContainer.current]);
 
-  return <div className="map-container-submit" ref={mapContainer}></div>;
-};
+//   return <div className="map-container-submit" ref={mapContainer}></div>;
+// };
 
 const AddCrossingPopup = (props: { open: boolean, closeCallback: any, acceptCallback: any }) => {
   if (props.open) {
@@ -89,8 +94,10 @@ const AddCrossingPopup = (props: { open: boolean, closeCallback: any, acceptCall
     return (
       <div id="modal_marker" className={popup_styles.outer}>
         <div className={popup_styles.holder}>
-          <div className={popup_styles.close} onClick={() => { props.closeCallback() }}>x</div>
-          <div>Add a crossing here?</div>
+          {/* <div className={stopwatchCSS.close} onClick={() => { props.closeCallback() }}>x</div> */}
+          <button onClick={()=>props.closeCallback()} className={stopwatchCSS.exit}><IoCloseSharp /></button>
+          <div className={stopwatchCSS.heading}>Add a crossing here?</div>
+          <div className={stopwatchCSS.sub_heading}>Drag the red marker to the location of the traffic signaled crossing.</div>
           <div className="modal_footer">
             {/* <div className="modal_button cancel" onClick={() => props.closeCallback()}></div> */}
             <div className="modal_button cancel" onClick={() => props.closeCallback()}>Cancel</div>
@@ -108,7 +115,7 @@ const AddCrossingPopup = (props: { open: boolean, closeCallback: any, acceptCall
 
 
 
-const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallback: any, setIdCallback: any,updateCallback: any }) => {
+const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallback: any, setIdCallback: any, updateCallback: any }) => {
 
 
 
@@ -189,7 +196,8 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
     if (marker == null) {
       var marker_ = new maplibregl.Marker({
         color: "#FF3333",
-        draggable: true
+        draggable: true,
+        scale:1.5,
       }).setLngLat([lng, lat])
         .addTo(map);
 
@@ -248,80 +256,69 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
         clusterRadius: 40 // Radius of each cluster when clustering points (defaults to 50)
 
       });
+      
+      
+      // for (let ward in wards_geo_json.features){
+      //   print(ward["properties"]["WARDNAME"])
+      // }
 
+      wards_geo_json.features.forEach((ward)=>{
+        console.log(ward.properties.WARDNAME)
+        let key = ward.properties.WARDNAME
+        map.addSource(key, {
+          'type': 'geojson',
+          'data': {
+            'type': 'Feature',
+            'id': 0,
+            'geometry':
+              ward.geometry
+          }
+        })
 
+        map.addLayer({
+          'id': key + '_fill',
+          'type': 'fill',
+          'source': key,
+          'layout': {},
+          'paint': {
+            'fill-color': '#888',
+            'fill-opacity': [
+              'case',
+              ['boolean',["feature-state","hover"], false],
+              0.5,
+              0.1
+              ]
+          }
+        });
 
+        map.addLayer({
+          'id': key + '_line',
+          'type': 'line',
+          'source': key,
+          'layout': {},
+          'paint': {
+            'line-color': '#888',
+            'line-opacity': 1,
+            'line-width': 2
+          }
+        });
 
-      map.addSource('harborne', {
-        'type': 'geojson',
-        'data': {
-          'type': 'Feature',
-          'geometry':
-            harborne
-        }
       })
-
-      map.addSource('quinton', {
-        'type': 'geojson',
-        'data': {
-          'type': 'Feature',
-          'geometry':
-            quinton
-        }
-      })
-
-      map.addLayer({
-        'id': 'harborne_fill',
-        'type': 'fill',
-        'source': 'harborne',
-        'layout': {},
-        'paint': {
-          'fill-color': '#088',
-          'fill-opacity': 0.1,
-        }
-      });
-
-      map.addLayer({
-        'id': 'harborne_line',
-        'type': 'line',
-        'source': 'harborne',
-        'layout': {},
-        'paint': {
-          'line-color': '#088',
-          'line-opacity': 1,
-          'line-width': 2
-        }
-      });
-
-      map.addLayer({
-        'id': 'quinton_fill',
-        'type': 'fill',
-        'source': 'quinton',
-        'layout': {},
-        'paint': {
-          'fill-color': '#ff4118',
-          'fill-opacity': 0.1,
-        }
-      });
-
-      map.addLayer({
-        'id': 'quinton_line',
-        'type': 'line',
-        'source': 'quinton',
-        'layout': {},
-        'paint': {
-          'line-color': '#ff4118',
-          'line-opacity': 1,
-          'line-width': 2
-        }
-      });
 
       map.addControl(
         new maplibregl.GeolocateControl({
           positionOptions: {
             enableHighAccuracy: true
           },
-          trackUserLocation: true
+          trackUserLocation: true,
+        })
+      );
+
+      map.addControl(
+        new maplibregl.NavigationControl({
+          // visualizePitch: true,
+          showZoom: true,
+          showCompass: true
         })
       );
 
@@ -342,9 +339,9 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
             ['get', 'point_count'],
             '#1a73e8',
             100,
-            '#f1f075',
+            '#f2621f',
             750,
-            '#f28cb1'
+            '#db1200'
           ],
           'circle-radius': [
             'step',
@@ -616,45 +613,46 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
 
   }
 
- function addCrossing(){
-  // console.log("Update type", signals);
+  function addCrossing() {
+    // console.log("Update type", signals);
 
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ lat:marker.getLngLat().lat, lng: marker.getLngLat().lng })
-        };
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lat: marker.getLngLat().lat, lng: marker.getLngLat().lng })
+    };
 
 
-        fetch('/api/new_crossing', requestOptions)
-            .then(response => {
-                console.log(response)
-                if (response.status == 200) {
-                    response.json().then((data) => {
-                        console.log("success")
-                        marker.remove();
-                        SetMarker(null);
-                        props.updateCallback();
-                        setMarkerPopupOpen(false);
-                        props.setIdCallback(data.id)
-                    });
-                } else {
-                    console.log("Failed Upload")
-                }
-            })
- }
+    fetch('/api/new_crossing', requestOptions)
+      .then(response => {
+        console.log(response)
+        if (response.status == 200) {
+          response.json().then((data) => {
+            console.log("success")
+            marker.remove();
+            SetMarker(null);
+            props.updateCallback();
+            setMarkerPopupOpen(false);
+            props.setIdCallback(data.id)
+          });
+        } else {
+          console.log("Failed Upload")
+        }
+      })
+  }
 
   return <div className="map-container-main" ref={mapContainer}>
-    <AddCrossingPopup open={markerPopupOpen} closeCallback={() => { 
-      setMarkerPopupOpen(false) 
+    <AddCrossingPopup open={markerPopupOpen} closeCallback={() => {
+      setMarkerPopupOpen(false)
       marker.remove();
       SetMarker(null);
       // map.
 
-    }} acceptCallback={() => { addCrossing()
+    }} acceptCallback={() => {
+      addCrossing()
     }
-  }
-        
+    }
+
     ></AddCrossingPopup>
     <button className="menu-button" onClick={() => { setSettingsOpen(true) }}><GiHamburgerMenu></GiHamburgerMenu></button>
     <button className="menu-button add" onClick={() => { addMarker() }}><BiMessageAltAdd></BiMessageAltAdd></button>
@@ -668,4 +666,4 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
 
 
 
-export { MapSubmit, MapMain };    
+export {  MapMain };    

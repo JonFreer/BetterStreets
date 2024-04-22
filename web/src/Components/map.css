@@ -64,7 +64,8 @@
     user-select: none;
     cursor: pointer;
     border: none;
-    line-height: 43px;
+    line-height: 45px;
+    font-size: 20px;
   }
 
   .add{

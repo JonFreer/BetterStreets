@@ -156,27 +156,26 @@ def load_geojson_in_json(
     api = overpy.Overpass()
     print("Loading GeoJson")
     result = api.query("""
-    node(52.416807660144705, -2.0267880276083505,52.54420452241926, -1.7436518538274453) [highway=crossing];
+    node(52.36296895518849, -2.0889678686828708, 52.63810384040932, -1.6689622452780035) [highway=crossing];
     (._;>;);
     out body;
     """)
     import os
     dirname =  os.path.dirname(os.path.dirname(__file__))
-    with open(os.path.join(dirname, 'JSON/harborne.json')) as f:
-        h_json = json.load(f)
-    with open(os.path.join(dirname, 'JSON/quinton.json')) as f:
-        q_json = json.load(f)
+    with open(os.path.join(dirname, 'JSON/birmingham.json')) as f:
+        bham_json = json.load(f)
 
-    h_shape = shape(h_json)
-    q_shape = shape(q_json)
-    # print(h_shape)
+    b_shape = shape(bham_json)
+
+    print(len(result.nodes))
+
     for node in result.nodes:
         type = ""
         if "crossing" in node.tags:
             type = node.tags["crossing"]
             
         point = Point(node.lon,node.lat)
-        if h_shape.contains(point) or q_shape.contains(point):
+        if b_shape.contains(point):
             crossing = crud.create_crossing(db, node.id, node.lat,node.lon,type)
         # if :
 

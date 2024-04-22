@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route,useParams } from "react-router-dom";
 
 import { MapMain } from './map';
 import PopUp from './popup';
+import Logger from './logger';
 // class Main extends React.Component<{}, {}> {
 function Main() {
 
@@ -66,8 +67,9 @@ function Main() {
         return (
             <>
             {/* {imgPopUpOpen?<ImgPopUp id={id} closeCallback={()=>{setImgPopUpOpen(false)}}  ></ImgPopUp>:<></>} */}
-            <PopUp open={popupOpen} id={id} data={data.find(obj => {return obj.id== id})} closeCallback={()=>{setPopUpOpen(false); getData()}}  
-            updateCallback={()=>{getData()}}  ></PopUp>
+            <Logger open={popupOpen} id={id} data={data.find(obj => {return obj.id== id})} closeCallback={()=>{setPopUpOpen(false); getData()}}  
+            updateCallback={()=>{getData()}}  ></Logger>
+
             <MapMain data={data} id={id} openImgPopUpCallback={()=>{console.log("hi");setPopUpOpen(true)}}
             setIdCallback={(id)=>{setId(id)}}  updateCallback={()=>{getData()}} 
             ></MapMain>

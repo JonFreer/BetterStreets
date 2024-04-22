@@ -6,9 +6,9 @@ import GeoJSONSource from 'maplibre-gl/src/source/geojson_source'
 import { Point } from 'geojson';
 import { LayoutRouteProps } from 'react-router-dom';
 import { renderToString } from 'react-dom/server'
-import harborne from '../JSON/harborne.json';
-import quinton from '../JSON/quinton.json';
-import wards_geojson from '../JSON/gejson';
+// import harborne from '../JSON/harborne.json';
+// import quinton from '../JSON/quinton.json';
+// import wards_geojson from '../JSON/gejson';
 import svg from '../resources/green_pin_shadow.png';
 import question_png from '../resources/question_pin_shadow.png';
 import tick_png from '../resources/tick_pin_shadow.png'
@@ -20,73 +20,10 @@ import stopwatchCSS from '../css/stopwatch.module.css';
 import wards_geo_json from '../JSON/birmingham_wards.geo.json';
 import { IoCloseSharp } from 'react-icons/io5';
 
-// import MapLayerEventType from
-// const MapSubmit = (props: { markerLat: number, markerLon: number, callback: any }) => {
-
-//   const mapContainer = useRef<any>(null);
-//   const [map, SetMap] = useState<any>(null);
-//   const [marker, SetMarker] = useState<any>(null);
-//   // const [startLat, setStartLat] = useState(props.markerLat)
-//   // 
-//   useEffect(() => {
-//     // if (props.markerLat !== startLat) {
-//     // setStartLat(props.markerLat);// if the props have been updated
-//     if (marker) {
-//       console.log(mapContainer.current)
-//       marker.setLngLat([props.markerLon, props.markerLat])
-//       map.setCenter([props.markerLon, props.markerLat])
-//     }
-
-//     // mapContainer.current
-//     // }
-//   }, [props.markerLat]);
-
-//   useEffect(() => {
-//     // This API key is for use only in stackblitz.com
-//     // Get your Geoapify API key on https://www.geoapify.com/get-started-with-maps-api
-//     // The Geoapify service is free for small projects and the development phase.
-//     // const myAPIKey = '18c85a44a76042788847e2fb74d27386';
-//     const mapStyle =
-//       'https://api.maptiler.com/maps/openstreetmap/style.json?key=2pdGAnnIuClGHUCta2TU';
-
-//     const initialState = {
-//       lng: props.markerLon,
-//       lat: props.markerLat,
-//       zoom: 16,
-//     };
-
-//     console.log(props.markerLat, props.markerLon)
-//     const map = new maplibregl.Map({
-//       container: mapContainer.current,
-//       style: `${mapStyle}`,
-//       center: [props.markerLon, props.markerLat],
-//       zoom: initialState.zoom,
-//     });
-
-//     // map.set
-
-//     SetMap(map);
-
-//     var marker = new maplibregl.Marker({
-//       // color: "#FF3333",
-//       draggable: true,
-//       scale: 5,
-//     }).setLngLat([props.markerLon, props.markerLat])
-//       .addTo(map);
-
-//     marker.on('drag', function (e) {
-//       props.callback(marker.getLngLat().lat, marker.getLngLat().lng)
-//     })
-
-//     SetMarker(marker);
+import { driver } from 'driver.js';
+import 'driver.js/dist/driver.css';
 
 
-
-//     // mapIsReadyCallback(map);
-//   }, [mapContainer.current]);
-
-//   return <div className="map-container-submit" ref={mapContainer}></div>;
-// };
 
 const AddCrossingPopup = (props: { open: boolean, closeCallback: any, acceptCallback: any }) => {
   if (props.open) {
@@ -115,7 +52,7 @@ const AddCrossingPopup = (props: { open: boolean, closeCallback: any, acceptCall
 
 
 
-const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallback: any, setIdCallback: any, updateCallback: any }) => {
+const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallback: any, setIdCallback: any, updateCallback: any,  tutorialCallback:any}) => {
 
 
 
@@ -130,18 +67,8 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
   });
   const [marker, SetMarker] = useState<any>(null);
   const [markerPopupOpen, setMarkerPopupOpen] = useState<boolean>(false);
-  // const [markers, SetMarkers] = useState<any>([]);
-  // const [startLat, setStartLat] = useState(props.markerLat)
-  // 
-  // useEffect(() => {
-  //   if (props.markerLat !== startLat) {
-  //     setStartLat(props.markerLat);// if the props have been updated
-  //     console.log(mapContainer.current)
-  //     marker.setLngLat([props.markerLon, props.markerLat])
-  //     map.setCenter([props.markerLon, props.markerLat])
-  //     // mapContainer.current
-  //   }
-  // }, [props.startLat]);
+
+
 
   useEffect(() => {
     if (map == null) {
@@ -153,16 +80,13 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
     }
     map.getSource('submissions').setData(
       data2geojson()
-      // cluster: true,
-      // clusterMaxZoom: 13, // Max zoom to cluster points on
-      // clusterRadius: 40 // Radius of each cluster when clustering points (defaults to 50)
     );
 
   }, [settings])
 
 
   function data2geojson() {
-
+    console.log("updating GEOJSON")
     const tempData = []
     for (let i = 0; i < props.data.length; i++) {
 
@@ -426,84 +350,6 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
         });
       });
 
-      // var _marker = new maplibregl.Marker({
-      //   color: "#FF3333",
-      //   draggable: true
-      // }).setLngLat([0, 0]).addTo(map);
-
-      // SetMarker(marker);
-
-      // marker.visible = false; 
-
-      // map.addLayer({
-      //   id: 'unclustered-point-0',
-      //   type: 'circle',
-      //   source: 'submissions',
-
-      //   filter: ['==', 'state', 0],
-      //   paint: {
-      //     // 'circle-color': '#11b4da',
-      //     'circle-color': '#ff0505',
-      //     'circle-radius': 8,
-      //     'circle-stroke-width': 1,
-      //     'circle-stroke-color': '#fff'
-      //   }
-      // });
-
-      // map.addLayer({
-      //   id: 'unclustered-point-1',
-      //   type: 'circle',
-      //   source: 'submissions',
-
-      //   filter: ['==', 'state', 1],
-      //   paint: {
-      //     // 'circle-color': '#11b4da',
-      //     'circle-color': '#ff7b00',
-      //     'circle-radius': 8,
-      //     'circle-stroke-width': 1,
-      //     'circle-stroke-color': '#fff'
-      //   }
-      // });
-
-      // map.addLayer({
-      //   id: 'unclustered-point-2',
-      //   type: 'circle',
-      //   source: 'submissions',
-
-      //   filter: ['==', 'state', 2],
-      //   paint: {
-      //     // 'circle-color': '#11b4da',
-      //     'circle-color': '#1fbf27',
-      //     'circle-radius': 8,
-      //     'circle-stroke-width': 1,
-      //     'circle-stroke-color': '#fff'
-      //   }
-      // });
-
-
-      //   map.on('click', 'clusters', (e) => {
-      //     const features = map.queryRenderedFeatures(e.point, {
-      //       layers: ['clusters']
-      //     });
-      //     const clusterId = features[0].properties.cluster_id;
-
-      //     let submissions_source = map.getSource('submissons')
-      //     if(submissions_source!=undefined){
-      //       submissions_source.getClusterExpansionZoom(
-      //         clusterId,
-      //         (err, zoom) => {
-      //           if (err) return;
-
-      //           map.easeTo({
-      //             center: features[0].geometry.coordinates,
-      //             zoom: zoom
-      //           });
-      //         }
-
-      //       );
-      //     }
-      // });
-
       map.on('click', 'clusters', function (e) {
         var features = map.queryRenderedFeatures(e.point, {
           layers: ['clusters']
@@ -549,39 +395,15 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
         window.history.replaceState(null, "BetterStreets", id)
       });
 
-
-
-
-
       SetMap(map);
-
-      // if(props.id!=undefined){
-      //   addModal(props.id)
-      // }
-      // SetMap(map);
     }
 
     );
-    // var pointLayer = new maplibregl.Layer
 
-    //   var marker = new maplibregl.Marker({
-    //     color: "#FF3333",
-    //     draggable: true
-    //   }).setLngLat([props.markerLon, props.markerLat])
-    //     .addTo(map);
-
-    //   marker.on('drag', function (e) {
-    //     props.callback(marker.getLngLat().lat, marker.getLngLat().lng)
-    // })
-
-    //   SetMarker(marker);
-
-
-
-    //   // mapIsReadyCallback(map);
   }, [mapContainer.current]);
 
   useEffect(() => {
+    console.log("props.data update")
     if (map != null) {
       // console.log("updated values")
       map.getSource('submissions').setData(data2geojson())
@@ -614,7 +436,17 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
   }
 
   function addCrossing() {
-    // console.log("Update type", signals);
+
+
+    props.tutorialCallback(7,{ lat: marker.getLngLat().lat, lng: marker.getLngLat().lng });
+    marker.remove();
+    SetMarker(null);
+    props.updateCallback();
+    setMarkerPopupOpen(false);
+
+    if(props.tutorialCallback != null){
+      return;
+    }
 
     const requestOptions = {
       method: 'POST',
@@ -646,8 +478,7 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
       setMarkerPopupOpen(false)
       marker.remove();
       SetMarker(null);
-      // map.
-
+      props.tutorialCallback(7,null);
     }} acceptCallback={() => {
       addCrossing()
     }
@@ -663,7 +494,5 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
       open={settingsOpen}></SideBarSettings>
   </div>;
 };
-
-
 
 export {  MapMain };    

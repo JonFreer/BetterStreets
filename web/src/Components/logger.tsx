@@ -7,7 +7,7 @@ import { ModalMetaData, ModalTextInput } from './modal';
 import { IoCloseSharp } from "react-icons/io5";
 // import { ModalInput } from './modal';
 
-function Logger(props: { open: boolean, id: string, data: any, closeCallback: any, updateCallback: any }) {
+function Logger(props: { open: boolean, id: string, data: any, closeCallback: any, updateCallback: any, tutorialCallback:any }) {
 
     // const [isActive, setIsActive] = useState(false);
     // const [isPaused, setIsPaused] = useState(true);
@@ -115,7 +115,7 @@ function Logger(props: { open: boolean, id: string, data: any, closeCallback: an
                         {times}
 
 
-                        <button onClick={()=>setStopwatchOpen(true)} className={styles.survey_button}>Add Survey <BsFillStopwatchFill className={styles.icon} /></button>
+                        <button onClick={()=>{setStopwatchOpen(true); props.tutorialCallback(1)}} className={styles.survey_button}>Add Survey <BsFillStopwatchFill className={styles.icon} /></button>
 
                     
                         <div className={stopwatchCSS.grow_wrap}>
@@ -123,15 +123,15 @@ function Logger(props: { open: boolean, id: string, data: any, closeCallback: an
                         </div>
         
                         <div className={styles.timer_button_holder}>
-                            <div className={styles.submit + " modal_button cancel"} onClick={() => props.closeCallback()}>Cancel</div>
-                            <div className={styles.submit + " modal_button save "} >Submit</div>
+                            <div className={styles.submit + " modal_button cancel"} onClick={() => {props.closeCallback(); props.tutorialCallback(6);}}>Cancel</div>
+                            <div className={styles.submit + " modal_button save "}  onClick={() => {props.tutorialCallback(6);}}>Submit</div>
                         </div>
 
                     </div>
 
                 </div>
     
-                <Stopwatch open={stopwatchOpen} id={props.id} callbackCancel={()=>setStopwatchOpen(false)} successCallback={()=>{props.updateCallback();setStopwatchOpen(false)}}></Stopwatch>
+                <Stopwatch open={stopwatchOpen} id={props.id} callbackCancel={()=>setStopwatchOpen(false)} successCallback={()=>{props.updateCallback();setStopwatchOpen(false)}} tutorialCallback={(val:number,data:any)=>{props.tutorialCallback(val,data)}}></Stopwatch>
             </>
         )
     }
@@ -142,7 +142,7 @@ function Logger(props: { open: boolean, id: string, data: any, closeCallback: an
 }
 
 
-function Stopwatch(props:{open:boolean, callbackCancel:any, id:string, successCallback:any}){
+function Stopwatch(props:{open:boolean, callbackCancel:any, id:string, successCallback:any, tutorialCallback:any}){
 
     const [waitingTime, setWaitingTime] = useState(0);
     const [crossingTime, setCrossingTime] = useState(0);
@@ -183,6 +183,13 @@ function Stopwatch(props:{open:boolean, callbackCancel:any, id:string, successCa
 
         console.log("submitting: %f %f %s ", waiting_time, crossing_time, notes)
 
+        props.tutorialCallback(5,{ id: props.id, waiting_time: waiting_time, crossing_time: crossing_time, notes: notes })
+        
+        if (props.tutorialCallback != null){
+            props.successCallback()
+            return;
+        }
+
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -204,11 +211,11 @@ function Stopwatch(props:{open:boolean, callbackCancel:any, id:string, successCa
 
     let button = <></>
     if (state == 0){
-        button = <button className={stopwatchCSS.button} onClick={()=>setState(1)}>Start Wait Period</button> 
+        button = <button className={stopwatchCSS.button} onClick={()=>{setState(1); props.tutorialCallback(2)}}>Start Wait Period</button> 
     }else if(state ==1){
-        button = <button className={stopwatchCSS.button} style={{background:"orange"}}onClick={()=>setState(2)}>Start Crossing Period</button> 
+        button = <button className={stopwatchCSS.button} style={{background:"orange"}}onClick={()=>{setState(2);props.tutorialCallback(3)}}>Start Crossing Period</button> 
     }else if(state == 2){
-        button = <button className={stopwatchCSS.button} style={{background:"red"}} onClick={()=>setState(3)}>End Crossing Period</button> 
+        button = <button className={stopwatchCSS.button} style={{background:"red"}} onClick={()=>{setState(3);props.tutorialCallback(4)}}>End Crossing Period</button> 
     }else{
         button = <>
                     <div className={stopwatchCSS.grow_wrap}>
@@ -216,8 +223,8 @@ function Stopwatch(props:{open:boolean, callbackCancel:any, id:string, successCa
                     </div>
         
                     <div className={stopwatchCSS.button_holder}>
-                        <button onClick={()=>{setState(0); setCrossingTime(0); setWaitingTime(0);}} className={stopwatchCSS.reset}> Reset </button>
-                        <button className={stopwatchCSS.submit} onClick={()=>{submit()}}> Submit</button>
+                        <button onClick={()=>{setState(0); setCrossingTime(0); setWaitingTime(0); props.tutorialCallback(1)}} className={stopwatchCSS.reset}> Reset </button>
+                        <button className={stopwatchCSS.submit} onClick={()=>{submit();}}> Submit</button>
                     </div>
                 </>
     }
@@ -228,7 +235,7 @@ function Stopwatch(props:{open:boolean, callbackCancel:any, id:string, successCa
             
             <div className='modal_holder'>
                         <div id="modal_stopwatch" className={stopwatchCSS.stopwatch}>
-                            <button onClick={()=>props.callbackCancel()} className={stopwatchCSS.exit}><IoCloseSharp /></button>
+                            <button onClick={()=>{props.callbackCancel();props.tutorialCallback(0)}} className={stopwatchCSS.exit}><IoCloseSharp /></button>
                             <h3  className={stopwatchCSS.heading}>Crossing Stopwatch</h3>
 
                             <div className={stopwatchCSS.sub_heading}>Waiting Time</div>

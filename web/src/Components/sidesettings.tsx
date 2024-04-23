@@ -1,6 +1,7 @@
+import { IoCloseSharp } from 'react-icons/io5';
 import styles from '../css/settings.module.css';
 import {AiOutlineCloseCircle} from 'react-icons/ai'
-function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any, updateCallback:any}) {
+function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any, updateCallback:any, data:any}) {
     if(!props.open){
         document.getElementById('settings')?.classList.remove(styles.open);
     }else{
@@ -37,6 +38,35 @@ function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any,
         props.updateCallback(clonedSettings)
     })
 
+    let wards = {}
+
+    props.data.forEach((crossing)=>{
+        if(crossing.ward in wards){
+            wards[crossing.ward].total=wards[crossing.ward].total+1
+            if(crossing.state ==2){
+                wards[crossing.ward].complete=wards[crossing.ward].complete+1
+            }   
+        }else{
+            wards[crossing.ward]={total:0,complete:0}
+        }
+    }); 
+
+    var items = Object.keys(wards).map(
+        (key) => { return [key, wards[key]] });
+
+    items.sort(
+        (first, second) => { return second[1].total - first[1].total }
+        );
+
+    var keys = items.map(
+            (e) => { return e[0] });
+    
+    let wards_divs =  []
+
+    for (var i in keys){
+        wards_divs.push(<div className={styles.ward_holder}> {keys[i]} <span className={styles.ward_number}>{wards[keys[i]].complete}/{wards[keys[i]].total}</span> </div>)
+    }
+
     return(<div id="settings" className={styles.sidebar}>
         <div className={styles.sidebar_title}>Filter</div>
         <div className={styles.sidebar_check} >
@@ -64,7 +94,11 @@ function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any,
                     }}/>
                 <label className={styles.sidebar_label} onClick={()=>{updateUnclassified()}} >Unclassified</label>
         </div>
-        <button onClick={()=>{props.closeCallback()}} className={styles.close}><AiOutlineCloseCircle /></button>
+        <div className={styles.sidebar_title}>Wards </div>
+        {wards_divs}
+        <button onClick={()=>props.closeCallback()} className={styles.close}><IoCloseSharp /></button>
+
+
     </div>)
 
 }

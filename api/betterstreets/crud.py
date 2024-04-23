@@ -43,14 +43,15 @@ def create_submission(db: Session, time:datetime, lat:float,lon:float,tags:Dict[
         return None
     
 
-def create_crossing(db:Session, osm_id:int, lat:float,lon:float,type_:str)->models.Crossing:
+def create_crossing(db:Session, osm_id:int, lat:float,lon:float,type_:str, ward_name:str)->models.Crossing:
     print("Creating Crossing")
 
     db_submission = models.Crossing( 
         osm_id=osm_id,
         lat=lat,
         lon=lon,
-        type=type_)
+        type=type_,
+        ward=ward_name)
 
     db.add(db_submission)
     db.commit()

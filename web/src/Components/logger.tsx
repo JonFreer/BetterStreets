@@ -110,7 +110,8 @@ function Logger(props: { open: boolean, id: string, data: any, closeCallback: an
                 <div id="modal" className={styles.outer}>
                     <div className={styles.holder}>
 
-                        <div className={stopwatchCSS.heading}>Times</div>
+                        <div className={stopwatchCSS.heading}>Times <span style={{float:'right'}}>{props.data.ward} </span></div>
+                        
 
                         {times}
 
@@ -185,7 +186,7 @@ function Stopwatch(props:{open:boolean, callbackCancel:any, id:string, successCa
 
         props.tutorialCallback(5,{ id: props.id, waiting_time: waiting_time, crossing_time: crossing_time, notes: notes })
         
-        if (props.tutorialCallback != null){
+        if (window.localStorage.getItem("tutorial_complete")!="True"){
             props.successCallback()
             return;
         }

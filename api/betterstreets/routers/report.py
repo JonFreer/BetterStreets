@@ -17,7 +17,7 @@ import time as t
 
 router = APIRouter()
 
-@router.post("/report/",response_model=schemas.Submission, tags=["report"])
+@router.post("/report/",response_model=schemas.Crossing, tags=["report"])
 async def submit_report(id:str,db: Session = Depends(get_db)):
     submission = crud.set_visibility(db,id,False)
     return submission

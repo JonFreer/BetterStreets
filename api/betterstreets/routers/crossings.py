@@ -165,18 +165,34 @@ def load_geojson_in_json(
     with open(os.path.join(dirname, 'JSON/birmingham.json')) as f:
         bham_json = json.load(f)
 
+    with open(os.path.join(dirname, 'JSON/birmingham_wards.geo.json')) as f:
+        ward_json = json.load(f)
+
+    wards = {}
+    for ward in ward_json["features"]:
+        wards[ward["properties"]["WARDNAME"]]  = shape(ward["geometry"])
+
+
     b_shape = shape(bham_json)
 
     print(len(result.nodes))
 
     for node in result.nodes:
+
         type = ""
         if "crossing" in node.tags:
             type = node.tags["crossing"]
             
         point = Point(node.lon,node.lat)
         if b_shape.contains(point):
-            crossing = crud.create_crossing(db, node.id, node.lat,node.lon,type)
+            ward_name = ""
+
+            for w_name in wards:
+                print(ward_name)
+                if wards[w_name].contains(point):
+                    ward_name = w_name
+
+            crossing = crud.create_crossing(db, node.id, node.lat,node.lon,type,ward_name)
         # if :
 
         # else:

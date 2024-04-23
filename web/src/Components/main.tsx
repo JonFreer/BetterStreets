@@ -94,10 +94,14 @@ function Main() {
                 {/* {imgPopUpOpen?<ImgPopUp id={id} closeCallback={()=>{setImgPopUpOpen(false)}}  ></ImgPopUp>:<></>} */}
                 <Logger open={popupOpen} id={id} data={tutorialData.find(obj => {return obj.id== id})} closeCallback={()=>{setPopUpOpen(false); getData()}}  
                 updateCallback={()=>{getData()}} 
-                tutorialCallback={(val:number,data:any)=>{process_tutorial(val,data)}} ></Logger>
+                tutorialCallback={(val:number,data:any)=>{process_tutorial(val,data)}}
+                ></Logger>
 
                 <MapMain data={tutorialData} id={id} openImgPopUpCallback={()=>{console.log("hi"); setPopUpOpen(true)}}
-                setIdCallback={(id)=>{setId(id)}}  updateCallback={()=>{getData()}} tutorialCallback={(val:number,data:any)=>process_tutorial(val,data)}
+                setIdCallback={(id)=>{setId(id)}}  
+                updateCallback={()=>{getData()}} 
+                tutorialCallback={(val:number,data:any)=>process_tutorial(val,data)}
+                
                 ></MapMain>
         </>
    )}
@@ -186,7 +190,7 @@ function TutorialModal(props:{id: String, tutorialState: number, tutorialCallbac
             {/* <span  className={tutorialCSS.heading}>Hello!</span> */}
             <div>
                 {/* This tool is designed to allow the wider community collect Traffic Crossing data. */}
-                We are now timing the length of the pedestrian phase. When the green man no longer shows, press "End Crossing Period".
+                We are now timing the length of the pedestrian phase. When the green man switches to the red man, press "End Crossing Period".
                 <br/>
                 <br/>
                 <b>Press "End Crossing Period"</b>

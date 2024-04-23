@@ -86,7 +86,6 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
 
 
   function data2geojson() {
-    console.log("updating GEOJSON")
     const tempData = []
     for (let i = 0; i < props.data.length; i++) {
 
@@ -187,7 +186,6 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
       // }
 
       wards_geo_json.features.forEach((ward)=>{
-        console.log(ward.properties.WARDNAME)
         let key = ward.properties.WARDNAME
         map.addSource(key, {
           'type': 'geojson',
@@ -444,7 +442,7 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
     props.updateCallback();
     setMarkerPopupOpen(false);
 
-    if(props.tutorialCallback != null){
+    if (window.localStorage.getItem("tutorial_complete")!="True"){
       return;
     }
 
@@ -491,7 +489,8 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
       settings={settings}
       updateCallback={(val) => { setSettings(val) }}
       closeCallback={() => { setSettingsOpen(false) }}
-      open={settingsOpen}></SideBarSettings>
+      open={settingsOpen}
+      data={props.data}></SideBarSettings>
   </div>;
 };
 

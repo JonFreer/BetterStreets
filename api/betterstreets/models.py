@@ -33,6 +33,7 @@ class Crossing(Base):
     lat = Column(Float,nullable=False)
     lon = Column(Float,nullable=False)
     type = Column(String,nullable=True)
+    ward = Column(String,nullable=True)
     updated_type = Column(String,nullable=True)
     notes = Column(String,nullable=True)
     visible = Column(Boolean,default=True)

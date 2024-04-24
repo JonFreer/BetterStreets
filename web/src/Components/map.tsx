@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import maplibregl from 'maplibre-gl';
+import maplibregl, { GeoJSONSource} from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './map.css'
 import './form.css'
@@ -310,39 +310,39 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
 
    
 
-      // map.loadImage(question_png).then((image) => {
-      //   map.addImage('question_pin', image.data);
-      //   map.addLayer({
-      //     id: 'unclustered-point-0',
-      //     type: 'symbol',
-      //     source: 'submissions',
+      map.loadImage(question_png).then((image) => {
+        map.addImage('question_pin', image.data);
+        map.addLayer({
+          id: 'unclustered-point-0',
+          type: 'symbol',
+          source: 'submissions',
 
-      //     filter: ['==', 'state', 0],
-      //     layout: {
-      //       'icon-image': 'question_pin',
-      //       'icon-size': 0.3,
-      //       'icon-anchor': 'bottom',
-      //       'icon-allow-overlap': true
-      //     }
-      //   });
-      // })
+          filter: ['==', 'state', 0],
+          layout: {
+            'icon-image': 'question_pin',
+            'icon-size': 0.3,
+            'icon-anchor': 'bottom',
+            'icon-allow-overlap': true
+          }
+        });
+      })
 
-      // map.loadImage(tick_png).then((image)=> {
-      //   map.addImage('tick_png', image.data);
-      //   map.addLayer({
-      //     id: 'unclustered-point-2',
-      //     type: 'symbol',
-      //     source: 'submissions',
+      map.loadImage(tick_png).then((image)=> {
+        map.addImage('tick_png', image.data);
+        map.addLayer({
+          id: 'unclustered-point-2',
+          type: 'symbol',
+          source: 'submissions',
 
-      //     filter: ['==', 'state', 2],
-      //     layout: {
-      //       'icon-image': 'tick_png',
-      //       'icon-size': 0.3,
-      //       'icon-anchor': 'bottom',
-      //       'icon-allow-overlap': true
-      //     }
-      //   });
-      // });
+          filter: ['==', 'state', 2],
+          layout: {
+            'icon-image': 'tick_png',
+            'icon-size': 0.3,
+            'icon-anchor': 'bottom',
+            'icon-allow-overlap': true
+          }
+        });
+      });
 
       map.on('click', 'clusters', function (e) {
         var features = map.queryRenderedFeatures(e.point, {
@@ -351,21 +351,19 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
         var clusterId = features[0].properties.cluster_id;
 
         let source = map.getSource('submissions');
-        // if (source != undefined) {
-        //   (source as unknown as GeoJSONSource).getClusterExpansionZoom(
-        //     clusterId,
-        //     function (err, zoom) {
-        //       if (err) return;
+        if (source != undefined) {
+          (source as unknown as GeoJSONSource).getClusterExpansionZoom(
+            clusterId).then((zoom)  =>{
+             
+              let c = (features[0].geometry)["coordinates"];
 
-        //       let c = (features[0].geometry as Point).coordinates;
-
-        //       map.easeTo({
-        //         center: [c[0], c[1]],
-        //         zoom: zoom
-        //       });
-        //     }
-        //   );
-        // }
+              map.easeTo({
+                center: [c[0], c[1]],
+                zoom: zoom
+              });
+            }
+          );
+        }
       });
 
       map.on('click', 'unclustered-point-1', function (e) {

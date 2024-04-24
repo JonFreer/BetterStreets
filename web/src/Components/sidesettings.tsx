@@ -1,7 +1,7 @@
 import { IoCloseSharp } from 'react-icons/io5';
 import styles from '../css/settings.module.css';
 import {AiOutlineCloseCircle} from 'react-icons/ai'
-function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any, updateCallback:any, data:any}) {
+function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any, updateCallback:any, data:any, wards:any, wardsCallback:any}) {
     if(!props.open){
         document.getElementById('settings')?.classList.remove(styles.open);
     }else{
@@ -38,21 +38,24 @@ function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any,
         props.updateCallback(clonedSettings)
     })
 
-    let wards = {}
+    // let wards = {}
 
-    props.data.forEach((crossing)=>{
-        if(crossing.ward in wards){
-            wards[crossing.ward].total=wards[crossing.ward].total+1
-            if(crossing.state ==2){
-                wards[crossing.ward].complete=wards[crossing.ward].complete+1
-            }   
-        }else{
-            wards[crossing.ward]={total:0,complete:0}
-        }
-    }); 
+    // props.data.forEach((crossing)=>{
+    //     if(crossing.ward in wards){
+    //         wards[crossing.ward].total=wards[crossing.ward].total+1
+    //         if(crossing.state ==2){
+    //             wards[crossing.ward].complete=wards[crossing.ward].complete+1
+    //         }   
+    //     }else{
+    //         wards[crossing.ward]={total:1,complete:0}
+    //         if(crossing.state ==2 ){
+    //             wards[crossing.ward].complete=wards[crossing.ward].complete+1
+    //         }   
+    //     }
+    // }); 
 
-    var items = Object.keys(wards).map(
-        (key) => { return [key, wards[key]] });
+    var items = Object.keys(props.wards).map(
+        (key) => { return [key, props.wards[key]] });
 
     items.sort(
         (first, second) => { return second[1].total - first[1].total }
@@ -64,7 +67,12 @@ function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any,
     let wards_divs =  []
 
     for (var i in keys){
-        wards_divs.push(<div className={styles.ward_holder}> {keys[i]} <span className={styles.ward_number}>{wards[keys[i]].complete}/{wards[keys[i]].total}</span> </div>)
+        const key = keys[i];
+        wards_divs.push(//onClick={props.wardsCallback(keys[i])}
+        <div key={key} onClick={()=>props.wardsCallback(key)} className={props.wards[key].active?styles.ward_holder_active:styles.ward_holder}> 
+            {key} 
+            <span className={styles.ward_number}>{props.wards[key].complete}/{props.wards[key].total}</span> 
+        </div>)
     }
 
     return(<div id="settings" className={styles.sidebar}>

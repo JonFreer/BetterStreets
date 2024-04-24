@@ -11,6 +11,7 @@ function Main() {
 
 
     const [data, setData] = useState<any>([]);
+    const [wards, setWards] = useState<any>({});
     const [popupOpen, setPopUpOpen] = useState(false);
     // let { id } = useParams();
     const [id, setId] = useState<string>("0");
@@ -51,8 +52,28 @@ function Main() {
                             }
                         }
 
-                        setData(data)
-                            // navigate("/")     
+                        let wards_dict = {}
+
+                        data.forEach((crossing)=>{
+                            if(crossing.ward in wards_dict){
+                                wards_dict[crossing.ward].total=wards_dict[crossing.ward].total+1
+                                if(crossing.state ==2){
+                                    wards_dict[crossing.ward].complete=wards_dict[crossing.ward].complete+1
+                                }   
+                            }else{
+                                wards_dict[crossing.ward]={total:1,complete:0,active:false}
+                                if(wards[crossing.ward]!=undefined){
+                                    wards_dict[crossing.ward].active = wards[crossing.ward].active
+                                }
+
+                                if(crossing.state ==2 ){
+                                    wards_dict[crossing.ward].complete=wards_dict[crossing.ward].complete+1
+                                }   
+                            }
+                        }); 
+                
+                        setWards(wards_dict);
+                        setData(data);
                     });
                 }else{
                     // setUploadState(0);
@@ -101,6 +122,8 @@ function Main() {
                 setIdCallback={(id)=>{setId(id)}}  
                 updateCallback={()=>{getData()}} 
                 tutorialCallback={(val:number,data:any)=>process_tutorial(val,data)}
+                wards={{}}
+                wardsCallback={()=>{}}
                 
                 ></MapMain>
         </>
@@ -114,6 +137,8 @@ function Main() {
 
             <MapMain data={data} id={id} openImgPopUpCallback={()=>{console.log("hi"); setPopUpOpen(true)}}
             setIdCallback={(id)=>{setId(id)}}  updateCallback={()=>{getData()}} tutorialCallback={(val:number)=>{}} 
+            wards={wards}
+            wardsCallback={(key)=>{let temp_wards = { ...wards};console.log(key); temp_wards[key].active = !temp_wards[key].active; setWards(temp_wards);}}
             ></MapMain>
        </>
        )

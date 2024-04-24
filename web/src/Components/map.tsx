@@ -2,13 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './map.css'
-import GeoJSONSource from 'maplibre-gl/src/source/geojson_source'
-import { Point } from 'geojson';
-import { LayoutRouteProps } from 'react-router-dom';
-import { renderToString } from 'react-dom/server'
-// import harborne from '../JSON/harborne.json';
-// import quinton from '../JSON/quinton.json';
-// import wards_geojson from '../JSON/gejson';
+import './form.css'
 import svg from '../resources/green_pin_shadow.png';
 import question_png from '../resources/question_pin_shadow.png';
 import tick_png from '../resources/tick_pin_shadow.png'
@@ -17,13 +11,8 @@ import SideBarSettings from './sidesettings';
 import { BiMessageAltAdd } from 'react-icons/bi';
 import popup_styles from '../css/popup.module.css';
 import stopwatchCSS from '../css/stopwatch.module.css';
-import wards_geo_json from '../JSON/birmingham_wards.geo.json';
+import wards_geo_json from '../JSON/birmingham_wards_compressed13p.geo.json';
 import { IoCloseSharp } from 'react-icons/io5';
-
-import { driver } from 'driver.js';
-import 'driver.js/dist/driver.css';
-
-
 
 const AddCrossingPopup = (props: { open: boolean, closeCallback: any, acceptCallback: any }) => {
   if (props.open) {
@@ -49,12 +38,7 @@ const AddCrossingPopup = (props: { open: boolean, closeCallback: any, acceptCall
   }
 }
 
-
-
-
-const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallback: any, setIdCallback: any, updateCallback: any,  tutorialCallback:any}) => {
-
-
+const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallback: any, setIdCallback: any, updateCallback: any,  tutorialCallback:any, wards:any,wardsCallback:any}) => {
 
   const mapContainer = useRef<any>(null);
   const [map, SetMap] = useState<any>(null);
@@ -90,26 +74,24 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
     for (let i = 0; i < props.data.length; i++) {
 
       if (props.data[i].state == 0 && settings.unclassified || props.data[i].state == 1 && settings.incomplete || props.data[i].state == 2 && settings.completed) {
+        
 
         tempData.push({
-          "type": "Feature",
-          "geometry": {
-            "type": "Point",
-            "coordinates": [props.data[i].lon, props.data[i].lat]
-          }, "properties": {
-            // "time": props.data[i].time,
-            "id": props.data[i].id,
-            "state": props.data[i].state,
-          }
+          type: "Feature",
+          geometry: {
+            type:'Point',
+            coordinates: [props.data[i].lon, props.data[i].lat]
+          },
+          properties: {         
+            id: props.data[i].id,
+            state: props.data[i].state,}
         })
       }
     }
 
-    return ({
-      "type": "FeatureCollection",
-      "features": tempData
-    });
+    return(tempData)
   }
+
   const addMarker = (() => {
     // props 
     // marker
@@ -171,30 +153,33 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
 
 
     map.on("load", function () {
-      map.addSource('submissions', {
-        'type': 'geojson',
-        data: data2geojson(),
-        cluster: true,
-        clusterMaxZoom: 13, // Max zoom to cluster points on
-        clusterRadius: 40 // Radius of each cluster when clustering points (defaults to 50)
 
+      map.addSource('submissions', {
+          'type': 'geojson',
+          data: {
+            'type': 'FeatureCollection',
+            features: data2geojson()
+          },
+          cluster: true,
+          clusterMaxZoom: 13, // Max zoom to cluster points on
+          clusterRadius: 40 // Radius of each cluster when clustering points (defaults to 50)
       });
       
-      
-      // for (let ward in wards_geo_json.features){
-      //   print(ward["properties"]["WARDNAME"])
-      // }
-
+      // map.addSource("wards", wards_geo_json);
+  
+     
       wards_geo_json.features.forEach((ward)=>{
         let key = ward.properties.WARDNAME
         map.addSource(key, {
-          'type': 'geojson',
-          'data': {
-            'type': 'Feature',
-            'id': 0,
-            'geometry':
-              ward.geometry
-          }
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            id: 0,
+            geometry:
+              ward.geometry as {type: "Polygon"; coordinates: number[][][];} ,
+            properties: {}
+          },
+
         })
 
         map.addLayer({
@@ -294,9 +279,8 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
 
       });
 
-      map.loadImage(svg, function (error, image) {
-        if (error) throw error;
-        map.addImage('green_pin', image);
+      map.loadImage(svg).then((image)=>{
+        map.addImage('green_pin', image.data);
         map.addLayer({
           id: 'unclustered-point-1',
           type: 'symbol',
@@ -312,9 +296,26 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
         });
       })
 
-      map.loadImage(question_png, function (error, image) {
-        if (error) throw error;
-        map.addImage('question_pin', image);
+      // map.loadImage(svg, function ( image) {
+      //   // if (error) throw error;
+      //   map.addImage('green_pin', image);
+      //   map.addLayer({
+      //     id: 'unclustered-point-1',
+      //     type: 'symbol',
+      //     source: 'submissions',
+
+      //     filter: ['==', 'state', 1],
+      //     layout: {
+      //       'icon-image': 'green_pin',
+      //       'icon-size': 0.3,
+      //       'icon-anchor': 'bottom',
+      //       'icon-allow-overlap': true
+      //     }
+      //   });
+      // })
+
+      map.loadImage(question_png).then((image) => {
+        map.addImage('question_pin', image.data);
         map.addLayer({
           id: 'unclustered-point-0',
           type: 'symbol',
@@ -330,9 +331,8 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
         });
       })
 
-      map.loadImage(tick_png, function (error, image) {
-        if (error) throw error;
-        map.addImage('tick_png', image);
+      map.loadImage(tick_png).then((image)=> {
+        map.addImage('tick_png', image.data);
         map.addLayer({
           id: 'unclustered-point-2',
           type: 'symbol',
@@ -355,21 +355,21 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
         var clusterId = features[0].properties.cluster_id;
 
         let source = map.getSource('submissions');
-        if (source != undefined) {
-          (source as unknown as GeoJSONSource).getClusterExpansionZoom(
-            clusterId,
-            function (err, zoom) {
-              if (err) return;
+        // if (source != undefined) {
+        //   (source as unknown as GeoJSONSource).getClusterExpansionZoom(
+        //     clusterId,
+        //     function (err, zoom) {
+        //       if (err) return;
 
-              let c = (features[0].geometry as Point).coordinates;
+        //       let c = (features[0].geometry as Point).coordinates;
 
-              map.easeTo({
-                center: [c[0], c[1]],
-                zoom: zoom
-              });
-            }
-          );
-        }
+        //       map.easeTo({
+        //         center: [c[0], c[1]],
+        //         zoom: zoom
+        //       });
+        //     }
+        //   );
+        // }
       });
 
       map.on('click', 'unclustered-point-1', function (e) {
@@ -490,7 +490,9 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
       updateCallback={(val) => { setSettings(val) }}
       closeCallback={() => { setSettingsOpen(false) }}
       open={settingsOpen}
-      data={props.data}></SideBarSettings>
+      data={props.data}
+      wards={props.wards}
+      wardsCallback={props.wardsCallback}></SideBarSettings>
   </div>;
 };
 

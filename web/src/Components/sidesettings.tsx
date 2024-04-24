@@ -66,10 +66,12 @@ function SideBarSettings(props: { open:boolean, closeCallback:any, settings:any,
     
     let wards_divs =  []
 
+    const non_active = !Object.values(props.wards).some(e => e["active"]==true);
+    const ward_style = non_active ? styles.ward_holder: styles.ward_holder_not_active
     for (var i in keys){
         const key = keys[i];
-        wards_divs.push(//onClick={props.wardsCallback(keys[i])}
-        <div key={key} onClick={()=>props.wardsCallback(key)} className={props.wards[key].active?styles.ward_holder_active:styles.ward_holder}> 
+        wards_divs.push(
+        <div key={key} onClick={()=>props.wardsCallback(key)} className={props.wards[key].active?styles.ward_holder_active:ward_style}> 
             {key} 
             <span className={styles.ward_number}>{props.wards[key].complete}/{props.wards[key].total}</span> 
         </div>)

@@ -60,20 +60,47 @@
 
   .ward_holder{
     background: #f9f9f9;
-        margin: 10px 0px;
-        border-radius: 5px;
-        padding: 10px;
-        font-weight: 700;
-        font-size: 15px;
+    margin: 10px 0px;
+    border-radius: 5px;
+    padding: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    user-select:none;
+    cursor: pointer;
+    min-height: 20px;
+  }
+
+  .ward_holder_not_active{
+    background: #f9f9f9;
+    color:#9f9f9f;
+    margin: 10px 0px;
+    border-radius: 5px;
+    padding: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    user-select:none;
+    cursor: pointer;
+    min-height: 20px;
+  }
+
+  .ward_holder_not_active:hover{
+    background: #edecec;
+  }
+
+  .ward_holder:hover{
+    background: #edecec;
   }
 
   .ward_holder_active{
     background: #9fd384;
-        margin: 10px 0px;
-        border-radius: 5px;
-        padding: 10px;
-        font-weight: 700;
-        font-size: 15px;
+    margin: 10px 0px;
+    border-radius: 5px;
+    padding: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    user-select:none;
+    cursor: pointer;
+    min-height: 20px;
   }
 
   .ward_number{

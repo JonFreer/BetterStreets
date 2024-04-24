@@ -63,29 +63,37 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
       return;
     }
     map.getSource('submissions').setData(
-      data2geojson()
+      {
+        'type': 'FeatureCollection',
+        features: data2geojson()
+      },
+      // data2geojson()
     );
 
-  }, [settings])
+  }, [settings,props.wards])
 
 
   function data2geojson() {
     const tempData = []
     for (let i = 0; i < props.data.length; i++) {
 
-      if (props.data[i].state == 0 && settings.unclassified || props.data[i].state == 1 && settings.incomplete || props.data[i].state == 2 && settings.completed) {
-        
+      if(props.wards[props.data[i].ward].active || !Object.values(props.wards).some(e => e["active"]==true)){
 
-        tempData.push({
-          type: "Feature",
-          geometry: {
-            type:'Point',
-            coordinates: [props.data[i].lon, props.data[i].lat]
-          },
-          properties: {         
-            id: props.data[i].id,
-            state: props.data[i].state,}
-        })
+        if (props.data[i].state == 0 && settings.unclassified || props.data[i].state == 1 && settings.incomplete || props.data[i].state == 2 && settings.completed) {
+          
+
+          tempData.push({
+            type: "Feature",
+            geometry: {
+              type:'Point',
+              coordinates: [props.data[i].lon, props.data[i].lat]
+            },
+            properties: {         
+              id: props.data[i].id,
+              state: props.data[i].state,
+              ward: props.data[i].ward}
+          })
+        }
       }
     }
 
@@ -279,14 +287,18 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
 
       });
 
+
       map.loadImage(svg).then((image)=>{
         map.addImage('green_pin', image.data);
         map.addLayer({
           id: 'unclustered-point-1',
           type: 'symbol',
           source: 'submissions',
-
-          filter: ['==', 'state', 1],
+          filter:['==', 'state', 1],
+          // filter: ["all",
+          //   ['==', 'state', 1],
+          //   ['in', "ward", ...valid],
+          // ],
           layout: {
             'icon-image': 'green_pin',
             'icon-size': 0.3,
@@ -296,17 +308,18 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
         });
       })
 
-      // map.loadImage(svg, function ( image) {
-      //   // if (error) throw error;
-      //   map.addImage('green_pin', image);
+   
+
+      // map.loadImage(question_png).then((image) => {
+      //   map.addImage('question_pin', image.data);
       //   map.addLayer({
-      //     id: 'unclustered-point-1',
+      //     id: 'unclustered-point-0',
       //     type: 'symbol',
       //     source: 'submissions',
 
-      //     filter: ['==', 'state', 1],
+      //     filter: ['==', 'state', 0],
       //     layout: {
-      //       'icon-image': 'green_pin',
+      //       'icon-image': 'question_pin',
       //       'icon-size': 0.3,
       //       'icon-anchor': 'bottom',
       //       'icon-allow-overlap': true
@@ -314,39 +327,22 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
       //   });
       // })
 
-      map.loadImage(question_png).then((image) => {
-        map.addImage('question_pin', image.data);
-        map.addLayer({
-          id: 'unclustered-point-0',
-          type: 'symbol',
-          source: 'submissions',
+      // map.loadImage(tick_png).then((image)=> {
+      //   map.addImage('tick_png', image.data);
+      //   map.addLayer({
+      //     id: 'unclustered-point-2',
+      //     type: 'symbol',
+      //     source: 'submissions',
 
-          filter: ['==', 'state', 0],
-          layout: {
-            'icon-image': 'question_pin',
-            'icon-size': 0.3,
-            'icon-anchor': 'bottom',
-            'icon-allow-overlap': true
-          }
-        });
-      })
-
-      map.loadImage(tick_png).then((image)=> {
-        map.addImage('tick_png', image.data);
-        map.addLayer({
-          id: 'unclustered-point-2',
-          type: 'symbol',
-          source: 'submissions',
-
-          filter: ['==', 'state', 2],
-          layout: {
-            'icon-image': 'tick_png',
-            'icon-size': 0.3,
-            'icon-anchor': 'bottom',
-            'icon-allow-overlap': true
-          }
-        });
-      });
+      //     filter: ['==', 'state', 2],
+      //     layout: {
+      //       'icon-image': 'tick_png',
+      //       'icon-size': 0.3,
+      //       'icon-anchor': 'bottom',
+      //       'icon-allow-overlap': true
+      //     }
+      //   });
+      // });
 
       map.on('click', 'clusters', function (e) {
         var features = map.queryRenderedFeatures(e.point, {

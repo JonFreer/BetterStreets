@@ -122,7 +122,7 @@ function Main() {
                 setIdCallback={(id)=>{setId(id)}}  
                 updateCallback={()=>{getData()}} 
                 tutorialCallback={(val:number,data:any)=>process_tutorial(val,data)}
-                wards={{}}
+                wards={wards}
                 wardsCallback={()=>{}}
                 
                 ></MapMain>

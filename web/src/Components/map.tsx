@@ -74,14 +74,11 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
 
 
   function data2geojson() {
+
     const tempData = []
     for (let i = 0; i < props.data.length; i++) {
-
-      if(props.wards[props.data[i].ward].active || !Object.values(props.wards).some(e => e["active"]==true)){
-
+      if(props.data[i].ward ==undefined || props.wards[props.data[i].ward].active || !Object.values(props.wards).some(e => e["active"]==true)){
         if (props.data[i].state == 0 && settings.unclassified || props.data[i].state == 1 && settings.incomplete || props.data[i].state == 2 && settings.completed) {
-          
-
           tempData.push({
             type: "Feature",
             geometry: {
@@ -96,7 +93,7 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
         }
       }
     }
-
+ 
     return(tempData)
   }
 
@@ -162,6 +159,8 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
 
     map.on("load", function () {
 
+      console.log("map loaded")
+
       map.addSource('submissions', {
           'type': 'geojson',
           data: {
@@ -174,10 +173,11 @@ const MapMain = (props: { data: any, id: string | undefined, openImgPopUpCallbac
       });
       
       // map.addSource("wards", wards_geo_json);
-  
+      console.log("map loaded 2")
      
       wards_geo_json.features.forEach((ward)=>{
         let key = ward.properties.WARDNAME
+        console.log("key")
         map.addSource(key, {
           type: 'geojson',
           data: {
